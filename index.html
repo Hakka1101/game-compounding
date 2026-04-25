@@ -1,0 +1,223 @@
+<!DOCTYPE html>
+<html lang="ja">
+<head>
+  <meta charset="UTF-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+  <title>調合所</title>
+  <link rel="preconnect" href="https://fonts.googleapis.com" />
+  <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin />
+  <!-- DotGothic16: 日本語対応のドット絵フォント -->
+  <link href="https://fonts.googleapis.com/css2?family=DotGothic16&display=swap" rel="stylesheet" />
+  <link rel="stylesheet" href="css/style.css" />
+</head>
+<body>
+
+  <!-- CRTスキャンライン演出オーバーレイ -->
+  <div class="scanlines" aria-hidden="true"></div>
+
+  <div class="game-container">
+
+    <!-- ════════ HEADER ════════ -->
+    <header class="game-header">
+      <div class="header-rule">▓▓▓▓▓▓▓▓▓▓▓▓▓▓▓▓▓▓▓▓▓▓▓▓▓▓▓▓▓▓▓▓▓▓▓▓▓▓▓▓▓▓▓▓▓▓▓▓▓▓▓▓▓▓▓▓▓▓▓▓▓▓</div>
+      <h1 class="game-title">調　合　所</h1>
+      <div class="header-rule">▓▓▓▓▓▓▓▓▓▓▓▓▓▓▓▓▓▓▓▓▓▓▓▓▓▓▓▓▓▓▓▓▓▓▓▓▓▓▓▓▓▓▓▓▓▓▓▓▓▓▓▓▓▓▓▓▓▓▓▓▓▓</div>
+    </header>
+
+    <!-- ════════ MAIN ════════ -->
+    <main class="game-main">
+
+      <!-- ── 左パネル：素材リスト ── -->
+      <section class="panel" id="panel-items">
+        <div class="panel-header">
+          <span class="ph-corner">┌</span>
+          <span class="panel-title-text">素　材</span>
+          <span class="ph-corner">┐</span>
+        </div>
+
+        <div class="panel-body">
+          <ul class="item-list" id="item-list">
+
+            <!-- JS側でここに item-entry を挿入する -->
+            <!-- デモ用のダミー（JS実装後に削除） -->
+            <li class="item-entry available" data-id="item_001">
+              <span class="item-cat-icon">🍄</span>
+              <span class="item-name">ニガタケ</span>
+              <span class="item-indicator">▷</span>
+            </li>
+            <li class="item-entry available selected" data-id="item_002">
+              <span class="item-cat-icon">🍄</span>
+              <span class="item-name">ハシリタケ</span>
+              <span class="item-indicator">■</span>
+            </li>
+            <li class="item-entry available" data-id="item_003">
+              <span class="item-cat-icon">🍄</span>
+              <span class="item-name">ニガハシリダケ</span>
+              <span class="item-indicator">▷</span>
+            </li>
+            <li class="item-entry locked" data-id="item_004" aria-disabled="true">
+              <span class="item-cat-icon locked-icon">？</span>
+              <span class="item-name">？？？</span>
+              <span class="item-indicator">🔒</span>
+            </li>
+            <li class="item-entry locked" data-id="item_005" aria-disabled="true">
+              <span class="item-cat-icon locked-icon">？</span>
+              <span class="item-name">？？？</span>
+              <span class="item-indicator">🔒</span>
+            </li>
+
+          </ul>
+        </div>
+
+        <div class="panel-footer">
+          <span class="pf-corner">└</span>
+          <span class="pf-text">CLICK TO SELECT</span>
+          <span class="pf-corner">┘</span>
+        </div>
+      </section>
+
+      <!-- ── 中央パネル：調合台 ── -->
+      <section class="panel panel-workspace" id="panel-workspace">
+        <div class="panel-header">
+          <span class="ph-corner">┌</span>
+          <span class="panel-title-text">調　合　台</span>
+          <span class="ph-corner">┐</span>
+        </div>
+
+        <div class="panel-body">
+
+          <!-- 素材スロット群 -->
+          <div class="ingredient-slots" id="ingredient-slots">
+
+            <!-- スロット①：素材あり（デモ） -->
+            <div class="ingredient-slot filled" data-slot="0">
+              <div class="slot-header-row">
+                <span class="slot-num">①</span>
+                <span class="slot-item-icon">🍄</span>
+                <span class="slot-item-name">ハシリタケ</span>
+                <button class="slot-remove-btn" title="取り除く" aria-label="スロット①の素材を取り除く">✕</button>
+              </div>
+              <div class="slot-process-row">
+                <span class="process-label">工程 ▶</span>
+                <div class="process-btns" role="group" aria-label="工程選択">
+                  <button class="process-btn" data-process="grind">砕く</button>
+                  <button class="process-btn active" data-process="boil">煮る</button>
+                  <button class="process-btn" data-process="dry">乾燥</button>
+                  <button class="process-btn" data-process="heat">加熱</button>
+                  <button class="process-btn" data-process="refine">精製</button>
+                </div>
+              </div>
+            </div>
+
+            <!-- スロット②：空き -->
+            <div class="ingredient-slot empty" data-slot="1">
+              <div class="slot-header-row">
+                <span class="slot-num">②</span>
+                <span class="slot-empty-text">── 素材を選んでください ──</span>
+              </div>
+            </div>
+
+            <!-- スロット③：空き -->
+            <div class="ingredient-slot empty" data-slot="2">
+              <div class="slot-header-row">
+                <span class="slot-num">③</span>
+                <span class="slot-empty-text">── 素材を選んでください ──</span>
+              </div>
+            </div>
+
+          </div>
+
+          <!-- 調合ボタン -->
+          <div class="compound-area">
+            <button class="btn-compound" id="btn-compound">
+              ▶▶　調　合　す　る　◀◀
+            </button>
+            <button class="btn-reset" id="btn-reset">
+              ［ リ セ ッ ト ］
+            </button>
+          </div>
+
+        </div>
+
+        <div class="panel-footer">
+          <span class="pf-corner">└</span>
+          <span class="pf-text">MAX 3 INGREDIENTS</span>
+          <span class="pf-corner">┘</span>
+        </div>
+      </section>
+
+      <!-- ── 右パネル：結果 ── -->
+      <section class="panel" id="panel-result">
+        <div class="panel-header">
+          <span class="ph-corner">┌</span>
+          <span class="panel-title-text">結　果</span>
+          <span class="ph-corner">┐</span>
+        </div>
+
+        <div class="panel-body result-panel-body">
+          <div class="result-display" id="result-display">
+
+            <!-- 待機中 -->
+            <div class="result-state" id="state-waiting">
+              <div class="result-big-icon">⚗️</div>
+              <div class="result-waiting-text blink-text">待　機　中 ．．．</div>
+              <div class="result-sub-text">
+                素材と工程を選んで<br>調合を実行してください
+              </div>
+            </div>
+
+            <!-- 成功（通常は hidden） -->
+            <div class="result-state hidden" id="state-success">
+              <div class="result-big-icon icon-flash">✨</div>
+              <div class="result-badge success-badge">調合成功！</div>
+              <div class="result-product-name" id="result-product-name">
+                加速の秘薬
+              </div>
+              <div class="result-product-desc" id="result-product-desc">
+                足が速くなる不思議な秘薬。<br>僅かに苦い後味が残る。
+              </div>
+            </div>
+
+            <!-- 失敗（通常は hidden） -->
+            <div class="result-state hidden" id="state-failure">
+              <div class="result-big-icon icon-shake">💀</div>
+              <div class="result-badge failure-badge">調合失敗</div>
+              <div class="result-sub-text">
+                素材が混ざり合い、<br>得体の知れないものが生まれた。
+              </div>
+            </div>
+
+          </div>
+        </div>
+
+        <div class="panel-footer">
+          <span class="pf-corner">└</span>
+          <span class="pf-text">RESULT LOG</span>
+          <span class="pf-corner">┘</span>
+        </div>
+      </section>
+
+    </main>
+
+    <!-- ════════ FOOTER ════════ -->
+    <footer class="game-footer">
+      <span class="footer-key">[CLICK]</span>素材選択
+      <span class="footer-key">[工程ボタン]</span>工程決定
+      <span class="footer-key">[調合する]</span>実行
+      <span class="footer-key">[リセット]</span>クリア
+    </footer>
+
+  </div><!-- /.game-container -->
+
+  <!-- データファイル -->
+  <script src="data_attributes.js"></script>
+  <script src="data_categories.js"></script>
+  <script src="data_effects.js"></script>
+  <script src="data_tastes.js"></script>
+  <script src="data_items.js"></script>
+  <script src="data_recipes.js"></script>
+  <script src="data_processes.js"></script>
+  <script src="main.js"></script>
+
+</body>
+</html>
