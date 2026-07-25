@@ -285,6 +285,16 @@ body {
   border-color: var(--green-dark);
 }
 
+/* 工程未選択エラー */
+.ingredient-slot.slot-error {
+  border-color: var(--red);
+  border-style: solid;
+}
+
+.ingredient-slot.slot-error .process-label {
+  color: var(--red);
+}
+
 .slot-header-row {
   display: flex;
   align-items: center;

@@ -44,12 +44,6 @@ const data_effects = {
         icon: "⚪",
         description: "成分を安定させる効果。熱を通すことで発現しやすい。"
     },
-    "speed": {
-        effectId: "speed",
-        name: "加速",
-        icon: "💨",
-        description: "移動速度や反応速度を高める効果。揮発性の高い素材に多い。"
-    },
     // --- 【魔法・特殊系（魔法スパイス）】 ---
     "levitation": {
         effectId: "levitation",

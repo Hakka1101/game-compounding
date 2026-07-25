@@ -6,217 +6,124 @@
   <title>調合所</title>
   <link rel="preconnect" href="https://fonts.googleapis.com" />
   <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin />
-  <!-- DotGothic16: 日本語対応のドット絵フォント -->
-  <link href="https://fonts.googleapis.com/css2?family=DotGothic16&display=swap" rel="stylesheet" />
-  <link rel="stylesheet" href="css/style.css" />
+  <link href="https://fonts.googleapis.com/css2?family=Shippori+Mincho:wght@400;600&display=swap" rel="stylesheet" />
+  <link rel="stylesheet" href="style.css" />
 </head>
 <body>
 
-  <!-- CRTスキャンライン演出オーバーレイ -->
-  <div class="scanlines" aria-hidden="true"></div>
+  <div class="toast" id="toast" role="status" aria-live="polite"></div>
 
   <div class="game-container">
 
-    <!-- ════════ HEADER ════════ -->
     <header class="game-header">
-      <div class="header-rule">▓▓▓▓▓▓▓▓▓▓▓▓▓▓▓▓▓▓▓▓▓▓▓▓▓▓▓▓▓▓▓▓▓▓▓▓▓▓▓▓▓▓▓▓▓▓▓▓▓▓▓▓▓▓▓▓▓▓▓▓▓▓</div>
-      <h1 class="game-title">調　合　所</h1>
-      <div class="header-rule">▓▓▓▓▓▓▓▓▓▓▓▓▓▓▓▓▓▓▓▓▓▓▓▓▓▓▓▓▓▓▓▓▓▓▓▓▓▓▓▓▓▓▓▓▓▓▓▓▓▓▓▓▓▓▓▓▓▓▓▓▓▓</div>
+      <h1 class="game-title">調合所</h1>
+      <p class="game-subtitle">草木と鉱物の覚え書き</p>
     </header>
 
-    <!-- ════════ MAIN ════════ -->
     <main class="game-main">
 
-      <!-- ── 左パネル：素材リスト ── -->
-      <section class="panel" id="panel-items">
-        <div class="panel-header">
-          <span class="ph-corner">┌</span>
-          <span class="panel-title-text">素　材</span>
-          <span class="ph-corner">┐</span>
+      <!-- ── 左：素材 ── -->
+      <section id="panel-items">
+        <h2 class="column-title">素材</h2>
+
+        <div class="item-tools">
+          <input type="search" id="item-search" class="item-search"
+                 placeholder="名前で探す" aria-label="素材を名前で探す" />
+          <div class="filter-btns" id="item-filters" role="group" aria-label="種別で絞る"></div>
         </div>
 
-        <div class="panel-body">
-          <ul class="item-list" id="item-list">
+        <ul class="item-list" id="item-list"></ul>
+        <p class="column-note">棚に <span id="item-total">0 種</span></p>
+      </section>
 
-            <!-- JS側でここに item-entry を挿入する -->
-            <!-- デモ用のダミー（JS実装後に削除） -->
-            <li class="item-entry available" data-id="item_001">
-              <span class="item-cat-icon">🍄</span>
-              <span class="item-name">ニガタケ</span>
-              <span class="item-indicator">▷</span>
-            </li>
-            <li class="item-entry available selected" data-id="item_002">
-              <span class="item-cat-icon">🍄</span>
-              <span class="item-name">ハシリタケ</span>
-              <span class="item-indicator">■</span>
-            </li>
-            <li class="item-entry available" data-id="item_003">
-              <span class="item-cat-icon">🍄</span>
-              <span class="item-name">ニガハシリダケ</span>
-              <span class="item-indicator">▷</span>
-            </li>
-            <li class="item-entry locked" data-id="item_004" aria-disabled="true">
-              <span class="item-cat-icon locked-icon">？</span>
-              <span class="item-name">？？？</span>
-              <span class="item-indicator">🔒</span>
-            </li>
-            <li class="item-entry locked" data-id="item_005" aria-disabled="true">
-              <span class="item-cat-icon locked-icon">？</span>
-              <span class="item-name">？？？</span>
-              <span class="item-indicator">🔒</span>
-            </li>
+      <!-- ── 中央：調合台 ── -->
+      <section id="panel-workspace">
+        <h2 class="column-title">調合台</h2>
 
-          </ul>
+        <div class="ingredient-slots" id="ingredient-slots"></div>
+
+        <div class="vessel-area">
+          <div class="vessel-row">
+            <span class="vessel-label">器</span>
+            <div class="vessel-btns" role="group" aria-label="器を選ぶ">
+              <button class="vessel-btn active" data-vessel="">使わない</button>
+              <button class="vessel-btn" data-vessel="item_175">
+                薬瓶<span class="vessel-count">0</span>
+              </button>
+              <button class="vessel-btn" data-vessel="item_088">
+                ガラス瓶<span class="vessel-count">0</span>
+              </button>
+            </div>
+          </div>
+          <p class="vessel-hint">液体は薬瓶に、気体はガラス瓶に納めなければ形を保てない。</p>
         </div>
 
-        <div class="panel-footer">
-          <span class="pf-corner">└</span>
-          <span class="pf-text">CLICK TO SELECT</span>
-          <span class="pf-corner">┘</span>
+        <div class="compound-area">
+          <button class="btn-compound" id="btn-compound">調合する</button>
+          <button class="btn-reset" id="btn-reset">やり直す</button>
         </div>
       </section>
 
-      <!-- ── 中央パネル：調合台 ── -->
-      <section class="panel panel-workspace" id="panel-workspace">
-        <div class="panel-header">
-          <span class="ph-corner">┌</span>
-          <span class="panel-title-text">調　合　台</span>
-          <span class="ph-corner">┐</span>
-        </div>
+      <!-- ── 右：覚え書き → 解いた調合 → 結果 ── -->
+      <section id="panel-notes">
 
-        <div class="panel-body">
+        <div class="right-section">
+          <h2 class="column-title">覚え書き<span class="rb-count" id="slip-count">0 枚</span></h2>
 
-          <!-- 素材スロット群 -->
-          <div class="ingredient-slots" id="ingredient-slots">
-
-            <!-- スロット①：素材あり（デモ） -->
-            <div class="ingredient-slot filled" data-slot="0">
-              <div class="slot-header-row">
-                <span class="slot-num">①</span>
-                <span class="slot-item-icon">🍄</span>
-                <span class="slot-item-name">ハシリタケ</span>
-                <button class="slot-remove-btn" title="取り除く" aria-label="スロット①の素材を取り除く">✕</button>
-              </div>
-              <div class="slot-process-row">
-                <span class="process-label">工程 ▶</span>
-                <div class="process-btns" role="group" aria-label="工程選択">
-                  <button class="process-btn" data-process="grind">砕く</button>
-                  <button class="process-btn active" data-process="boil">煮る</button>
-                  <button class="process-btn" data-process="dry">乾燥</button>
-                  <button class="process-btn" data-process="heat">加熱</button>
-                  <button class="process-btn" data-process="refine">精製</button>
-                </div>
-              </div>
-            </div>
-
-            <!-- スロット②：空き -->
-            <div class="ingredient-slot empty" data-slot="1">
-              <div class="slot-header-row">
-                <span class="slot-num">②</span>
-                <span class="slot-empty-text">── 素材を選んでください ──</span>
-              </div>
-            </div>
-
-            <!-- スロット③：空き -->
-            <div class="ingredient-slot empty" data-slot="2">
-              <div class="slot-header-row">
-                <span class="slot-num">③</span>
-                <span class="slot-empty-text">── 素材を選んでください ──</span>
-              </div>
-            </div>
-
+          <div class="slip-tools">
+            <div class="filter-btns" id="slip-filters" role="group" aria-label="出所で絞る"></div>
           </div>
+          <ul class="slip-index" id="slip-index"></ul>
 
-          <!-- 調合ボタン -->
-          <div class="compound-area">
-            <button class="btn-compound" id="btn-compound">
-              ▶▶　調　合　す　る　◀◀
-            </button>
-            <button class="btn-reset" id="btn-reset">
-              ［ リ セ ッ ト ］
-            </button>
-          </div>
-
+          <div class="memo-sheet" id="memo-sheet"></div>
         </div>
 
-        <div class="panel-footer">
-          <span class="pf-corner">└</span>
-          <span class="pf-text">MAX 3 INGREDIENTS</span>
-          <span class="pf-corner">┘</span>
-        </div>
-      </section>
-
-      <!-- ── 右パネル：結果 ── -->
-      <section class="panel" id="panel-result">
-        <div class="panel-header">
-          <span class="ph-corner">┌</span>
-          <span class="panel-title-text">結　果</span>
-          <span class="ph-corner">┐</span>
+        <div class="right-section">
+          <h2 class="column-title">解いた調合<span class="rb-count" id="recipe-count">0 / 0</span></h2>
+          <div class="rb-body" id="recipe-book"></div>
         </div>
 
-        <div class="panel-body result-panel-body">
-          <div class="result-display" id="result-display">
+        <div class="right-section">
+          <h2 class="column-title">結果</h2>
+          <div class="result-panel" id="result-display">
 
-            <!-- 待機中 -->
             <div class="result-state" id="state-waiting">
-              <div class="result-big-icon">⚗️</div>
-              <div class="result-waiting-text blink-text">待　機　中 ．．．</div>
-              <div class="result-sub-text">
-                素材と工程を選んで<br>調合を実行してください
-              </div>
+              <p class="result-sub-text">素材と工程、そして器を選び、<br>調合を試みる。</p>
             </div>
 
-            <!-- 成功（通常は hidden） -->
             <div class="result-state hidden" id="state-success">
-              <div class="result-big-icon icon-flash">✨</div>
-              <div class="result-badge success-badge">調合成功！</div>
-              <div class="result-product-name" id="result-product-name">
-                加速の秘薬
-              </div>
-              <div class="result-product-desc" id="result-product-desc">
-                足が速くなる不思議な秘薬。<br>僅かに苦い後味が残る。
-              </div>
+              <p class="result-badge">できあがった</p>
+              <p class="result-product-name" id="result-product-name"></p>
+              <p class="result-product-desc" id="result-product-desc"></p>
             </div>
 
-            <!-- 失敗（通常は hidden） -->
             <div class="result-state hidden" id="state-failure">
-              <div class="result-big-icon icon-shake">💀</div>
-              <div class="result-badge failure-badge">調合失敗</div>
-              <div class="result-sub-text">
-                素材が混ざり合い、<br>得体の知れないものが生まれた。
-              </div>
+              <p class="result-badge failure-badge">しくじった</p>
+              <p class="result-sub-text">素材が濁り合い、<br>名の付けようがないものになった。</p>
             </div>
 
           </div>
         </div>
 
-        <div class="panel-footer">
-          <span class="pf-corner">└</span>
-          <span class="pf-text">RESULT LOG</span>
-          <span class="pf-corner">┘</span>
-        </div>
       </section>
 
     </main>
 
-    <!-- ════════ FOOTER ════════ -->
     <footer class="game-footer">
-      <span class="footer-key">[CLICK]</span>素材選択
-      <span class="footer-key">[工程ボタン]</span>工程決定
-      <span class="footer-key">[調合する]</span>実行
-      <span class="footer-key">[リセット]</span>クリア
+      <span><span class="footer-key">素材</span>押して出し入れ</span>
+      <span><span class="footer-key">工程</span>素材ごとに決める</span>
+      <span><span class="footer-key">器</span>剤形に合わせる</span>
+      <span><span class="footer-key">覚え書き</span>素材や調合を押すと出る</span>
     </footer>
 
-  </div><!-- /.game-container -->
+  </div>
 
-  <!-- データファイル -->
-  <script src="data_attributes.js"></script>
   <script src="data_categories.js"></script>
   <script src="data_effects.js"></script>
-  <script src="data_tastes.js"></script>
+  <script src="data_processes.js"></script>
   <script src="data_items.js"></script>
   <script src="data_recipes.js"></script>
-  <script src="data_processes.js"></script>
+  <script src="data_hints.js"></script>
   <script src="main.js"></script>
 
 </body>
