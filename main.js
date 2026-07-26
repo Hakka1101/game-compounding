@@ -18,6 +18,8 @@ const itemByName = new Map(ITEMS_DATA.map(i => [i.name, i]));
 const procById   = new Map(PROCESSES_DATA.map(p => [p.id, p]));
 const catById    = new Map(dataCategories.map(c => [c.id, c]));
 
+const recipeByResult = new Map(RECIPES_DATA.map(r => [r.result, r]));
+
 const hintsByResult = new Map();
 (typeof HINTS_DATA !== 'undefined' ? HINTS_DATA : []).forEach(h => {
     if (!hintsByResult.has(h.result)) hintsByResult.set(h.result, []);
@@ -36,30 +38,39 @@ function score(r) {
 const state = {
     slots: [],              // [{ item, processId }]
     vesselId: null,
-    stock: {},              // 加工品の所持数
+    stock: {},              // 所持数
     vessels: { [VESSEL_GLASS]: START_VESSELS, [VESSEL_PHIAL]: START_VESSELS },
     unlockedRecipes: [],
     filter: 'all',
     query: '',
-    memo: null,          // { kind:'item'|'slip', key }
+    memoItem: null,      // 左に出す素材
+    memoSlip: null,      // 右に出す紙片 "result#no"
     slipFilter: 'all',
 };
 
-// 採取品・購入品は探索/売買が未実装のため無限扱い
-const isUnlimited = it => it.source === '採取' ||
-    (it.source === '購入' && it.id !== VESSEL_GLASS && it.id !== VESSEL_PHIAL);
-
+// 探索を実装したので、素材はすべて有限。
+// 遺物のうち瓶だけは売買が未実装のあいだ仮支給する。
 function held(id) {
     if (id === VESSEL_GLASS || id === VESSEL_PHIAL) return state.vessels[id];
-    const it = itemById.get(id);
-    if (!it) return 0;
-    return isUnlimited(it) ? Infinity : (state.stock[id] || 0);
+    return state.stock[id] || 0;
 }
 
 // ═══════════════════════════════════════════════════════
 //  初期化
 // ═══════════════════════════════════════════════════════
 function init() {
+    Object.assign(state, freshProgress());
+    startDay(0);
+    if (!loadGame()) saveGame();
+    buildViewTabs();
+    document.getElementById('btn-refuse').addEventListener('click', refuseBuyer);
+    document.getElementById('btn-event-ok').addEventListener('click', () => nextEvent());
+    document.getElementById('btn-ending-ok').addEventListener('click', restartGame);
+    document.getElementById('btn-save-menu').addEventListener('click', openSaveMenu);
+    document.getElementById('btn-rest').addEventListener('click', restDay);
+    document.getElementById('btn-rest-big').addEventListener('click', restDay);
+    document.getElementById('btn-next-day').addEventListener('click', nextDay);
+    document.getElementById('btn-home').addEventListener('click', () => goHome(false));
     buildFilters();
     buildSlipFilters();
     document.getElementById('item-search')
@@ -82,7 +93,84 @@ function renderAll() {
     renderVessels();
     renderRecipeBook();
     renderSlipIndex();
-    renderMemo();
+    renderItemMemo();
+    renderSlipMemo();
+    renderExplore();
+    renderShop();
+}
+
+// ── 調合所と採取を行き来する ──
+function buildViewTabs() {
+    document.querySelectorAll('.view-tab').forEach(tab => {
+        tab.addEventListener('click', () => showView(tab.dataset.view));
+    });
+}
+
+function showView(v) {
+    document.querySelectorAll('.view-tab').forEach(t =>
+        t.classList.toggle('active', t.dataset.view === v));
+    document.querySelector('.game-main').classList.toggle('hidden', v !== 'craft');
+    document.getElementById('view-explore').classList.toggle('hidden', v !== 'explore');
+    document.getElementById('view-shop').classList.toggle('hidden', v !== 'shop');
+}
+
+// ═══════════════════════════════════════════════════════
+//  朝の出来事と、一年の終わり
+// ═══════════════════════════════════════════════════════
+let eventQueue = [];
+
+function openMorning() {
+    const day = explore.day.date.index;
+    if (day >= CAL.deadlineDays) return showEnding();
+    eventQueue = dueEvents(day);
+    nextEvent(true);
+}
+
+function nextEvent(first) {
+    if (!first) {
+        const done = eventQueue.shift();
+        if (done) { applyEvent(done, explore.day.date.index); saveGame(); renderAll(); }
+    }
+    const ev = eventQueue[0];
+    const box = document.getElementById('event-overlay');
+    if (!ev) { box.classList.add('hidden'); return; }
+    document.getElementById('event-title').textContent = ev.title;
+    document.getElementById('event-text').textContent = ev.text;
+    box.classList.remove('hidden');
+}
+
+function showEnding() {
+    const e = judgeEnding();
+    state.ended = e.id;
+    saveGame();
+    document.getElementById('ending-title').textContent = e.title;
+    document.getElementById('ending-text').textContent = e.text;
+    const ul = document.getElementById('ending-notes');
+    ul.innerHTML = '';
+    e.notes.forEach(t => {
+        const li = document.createElement('li');
+        li.textContent = t;
+        ul.appendChild(li);
+    });
+    document.getElementById('ending-overlay').classList.remove('hidden');
+}
+
+function restartGame() {
+    clearSave();
+    location.reload();
+}
+
+// ── 保存の書き出しと読み込み ──
+function openSaveMenu() {
+    const code = prompt(
+        '続きは自動で保存されています。\n' +
+        'この文字列を控えておけば、別の環境でも再開できます。\n' +
+        '再開するときは、受け取った文字列をここに貼って OK を押してください。',
+        exportSave());
+    if (code === null) return;
+    if (code.trim() === exportSave()) return;
+    if (importSave(code)) { saveGame(); renderAll(); flash('続きを読み込みました。'); }
+    else flash('読み込めませんでした。');
 }
 
 // ═══════════════════════════════════════════════════════
@@ -151,7 +239,7 @@ function renderItemList() {
         li.innerHTML =
             `<span class="item-cat-icon">${cat ? cat.icon : '？'}</span>` +
             `<span class="item-name">${item.name}</span>` +
-            `<span class="item-count">${n === Infinity ? '∞' : n}</span>`;
+            `<span class="item-count">${n}</span>`;
         li.addEventListener('click', () => handleItemClick(item.id));
         list.appendChild(li);
     });
@@ -223,8 +311,7 @@ function renderVessels() {
 //  操作
 // ═══════════════════════════════════════════════════════
 function handleItemClick(itemId) {
-    state.memo = { kind: 'item', key: itemId };
-    renderSlipIndex();
+    state.memoItem = itemId;
     const at = state.slots.findIndex(s => s.item.id === itemId);
     if (at !== -1) {
         state.slots.splice(at, 1);
@@ -236,7 +323,7 @@ function handleItemClick(itemId) {
     }
     renderItemList();
     renderWorkspace();
-    renderMemo();
+    renderItemMemo();
     clearResultIfIdle();
 }
 
@@ -279,7 +366,7 @@ function handleCompound() {
 
     const recipe = checkRecipe(state.slots, state.vesselId);
     if (recipe) {
-        consume(recipe);
+        consume(recipe, state.slots);
         if (!state.unlockedRecipes.includes(recipe.result)) {
             state.unlockedRecipes.push(recipe.result);
         }
@@ -335,19 +422,81 @@ function matches(item, need) {
 //  消費と生成
 //  瓶は中身を使うと戻る（液体→薬瓶 / 気体→ガラス瓶）
 // ═══════════════════════════════════════════════════════
-function consume(recipe) {
-    state.slots.forEach(s => {
+function consume(recipe, slots) {
+    slots.forEach(s => {
         const it = s.item;
-        if (!isUnlimited(it)) {
-            state.stock[it.id] = Math.max(0, (state.stock[it.id] || 0) - 1);
-        }
+        state.stock[it.id] = Math.max(0, (state.stock[it.id] || 0) - 1);
         if (it.form === '液体') state.vessels[VESSEL_PHIAL]++;
         if (it.form === '気体') state.vessels[VESSEL_GLASS]++;
     });
     if (recipe.vessel) state.vessels[recipe.vessel]--;
 
     const made = itemByName.get(recipe.result);
-    if (made) state.stock[made.id] = (state.stock[made.id] || 0) + 1;
+    if (made) {
+        state.stock[made.id] = (state.stock[made.id] || 0) + 1;
+        state.everHeld[made.id] = true;
+    }
+    state.craftCount[recipe.result] = (state.craftCount[recipe.result] || 0) + 1;
+    if (state.firstCraftDay[recipe.result] === undefined && explore.day) {
+        state.firstCraftDay[recipe.result] = explore.day.date.index;
+    }
+    saveGame();
+}
+
+// ═══════════════════════════════════════════════════════
+//  覚えた調合を、素材を選ばずに作る
+//  手が覚えているので、棚から適当に見繕って同じものを作れる。
+//  安い素材から先に使う（稀少なものを勝手に消費しないため）
+// ═══════════════════════════════════════════════════════
+function planCraft(recipe) {
+    const need = recipe.ingredients;
+    const used = {};
+    const plan = [];
+
+    const fit = i => {
+        if (i === need.length) return true;
+        const g = need[i];
+        const cands = ITEMS_DATA
+            .filter(it => matches(it, g) && held(it.id) - (used[it.id] || 0) > 0)
+            .sort((a, b) => (a.price || 0) - (b.price || 0) ||
+                            (held(b.id) - (used[b.id] || 0)) - (held(a.id) - (used[a.id] || 0)));
+        for (const it of cands) {
+            used[it.id] = (used[it.id] || 0) + 1;
+            plan[i] = { item: it, processId: g.processId };
+            if (fit(i + 1)) return true;
+            used[it.id]--;
+            plan[i] = null;
+        }
+        return false;
+    };
+    return fit(0) ? plan : null;
+}
+
+// 足りないものを言葉で返す
+function whyCannot(recipe) {
+    if (recipe.vessel && held(recipe.vessel) <= 0) {
+        return `${itemById.get(recipe.vessel)?.name || '器'}が足りない。`;
+    }
+    return '棚の材料が足りない。';
+}
+
+function craftFromRecipe(name) {
+    if (explore.phase === 'out') return flash('今は外にいる。');
+    const recipe = recipeByResult.get(name);
+    if (!recipe) return;
+    if (recipe.vessel && held(recipe.vessel) <= 0) return flash(whyCannot(recipe));
+
+    const plan = planCraft(recipe);
+    if (!plan) return flash(whyCannot(recipe));
+
+    consume(recipe, plan);
+    state.memo = { kind: 'slip', key: null, result: name };
+    openSlipFor(name, true);
+    showSuccess(recipe);
+    state.slots = [];
+    state.vesselId = null;
+    renderAll();
+    flash(`${name} をひとつ作った。`);
 }
 
 // ═══════════════════════════════════════════════════════
@@ -416,9 +565,17 @@ function renderRecipeBook() {
             `<div class="rb-name">${name}</div>` +
             `<ul class="rb-ings">${lines}</ul>` +
             `<div class="rb-vessel">器：${ves}</div>` +
-            `<div class="rb-seal" aria-label="解明済み">解</div>`;
+            `<div class="rb-seal" aria-label="解明済み">解</div>` +
+            `<button class="rb-make" data-make="${name}">作る</button>`;
         const open = () => { openSlipFor(name); };
-        d.addEventListener('click', open);
+        d.addEventListener('click', e => {
+            if (e.target.classList.contains('rb-make')) {
+                e.stopPropagation();
+                craftFromRecipe(name);
+                return;
+            }
+            open();
+        });
         d.addEventListener('keydown', e => { if (e.key === 'Enter' || e.key === ' ') { e.preventDefault(); open(); } });
         box.appendChild(d);
     });
@@ -450,8 +607,12 @@ function describe(g) {
 const SLIP_FILTERS = ['すべて', '手書きメモ', '祖母のメモ', '書籍のページの写し', 'もらったメモ', '祖母の手書きの考察'];
 
 function heldSlips() {
-    return (typeof HINTS_DATA !== 'undefined' ? HINTS_DATA : [])
-        .filter(h => !h.unlock || state.unlockedRecipes.includes(h.unlock));
+    return (typeof HINTS_DATA !== 'undefined' ? HINTS_DATA : []).filter(h => {
+        if (h.route === '最初から') return true;
+        if (h.route === '祖母の部屋') return (state.unlockedBundles || []).includes(h.bundle);
+        if (h.route === '行商人') return (state.boughtSlips || []).includes(slipKey(h));
+        return false;
+    });
 }
 
 function slipKey(h) { return `${h.result}#${h.no}`; }
@@ -464,9 +625,24 @@ function openSlipFor(result, silent) {
         state.memo = { kind: 'slip', key: null, result };
     }
     renderSlipIndex();
-    renderMemo();
+    renderItemMemo();
+    renderSlipMemo();
+    renderExplore();
+    renderShop();
 }
 
+// ── 調合所と採取を行き来する ──
+function buildViewTabs() {
+    document.querySelectorAll('.view-tab').forEach(tab => {
+        tab.addEventListener('click', () => showView(tab.dataset.view));
+    });
+}
+
+
+// ═══════════════════════════════════════════════════════
+//  覚え書き
+//  素材を押せばその素材の記述、調合を押せば祖母たちの紙片
+// ═══════════════════════════════════════════════════════
 function buildSlipFilters() {
     const box = document.getElementById('slip-filters');
     box.innerHTML = '';
@@ -474,7 +650,8 @@ function buildSlipFilters() {
         const id = i === 0 ? 'all' : label;
         const b = document.createElement('button');
         b.className = 'filter-btn' + (id === state.slipFilter ? ' active' : '');
-        b.textContent = i === 0 ? label : label.replace('書籍のページの写し', '書籍').replace('祖母の手書きの考察', '考察');
+        b.textContent = i === 0 ? label
+            : label.replace('書籍のページの写し', '書籍').replace('祖母の手書きの考察', '考察');
         b.dataset.src = id;
         b.addEventListener('click', () => {
             state.slipFilter = id;
@@ -503,15 +680,15 @@ function renderSlipIndex() {
 
     list.forEach(h => {
         const solved = state.unlockedRecipes.includes(h.result);
-        const cur = state.memo?.kind === 'slip' && state.memo.key === slipKey(h);
         const li = document.createElement('li');
-        li.className = 'slip-entry' + (cur ? ' current' : '');
+        li.className = 'slip-entry' + (state.memoSlip === slipKey(h) ? ' current' : '');
         li.tabIndex = 0;
         li.innerHTML =
             `<span class="slip-src">${h.source}</span>` +
             `<span class="slip-name">${solved ? h.result : h.title}</span>` +
             (solved ? '<span class="slip-solved">解</span>' : '');
-        const open = () => { state.memo = { kind: 'slip', key: slipKey(h) }; renderSlipIndex(); renderMemo(); };
+        const open = () => { state.memoSlip = slipKey(h); state.slipMissingFor = null;
+                             renderSlipIndex(); renderSlipMemo(); };
         li.addEventListener('click', open);
         li.addEventListener('keydown', e => {
             if (e.key === 'Enter' || e.key === ' ') { e.preventDefault(); open(); }
@@ -520,39 +697,52 @@ function renderSlipIndex() {
     });
 }
 
-// ═══════════════════════════════════════════════════════
-//  覚え書き
-//  素材を押せばその素材の記述、調合を押せば祖母たちの紙片
-// ═══════════════════════════════════════════════════════
-function renderMemo() {
+// 解いたあとの覚え書きに追記される、確定した事実。未解明のうちは出さない
+function slipFacts(result) {
+    if (!state.unlockedRecipes.includes(result)) return '';
+    const r = recipeByResult.get(result);
+    if (!r) return '';
+    const ves = r.vessel ? (itemById.get(r.vessel)?.name || r.vessel) : '要らない';
+    const procs = [...new Set(r.ingredients.map(g => procById.get(g.processId)?.name).filter(Boolean))];
+    return `<p class="memo-facts">読み取れること　`
+        + `<span class="fact">素材 ${r.ingredients.length}</span>`
+        + `<span class="fact">器 ${ves}</span>`
+        + `<span class="fact">工程 ${procs.join('・')}</span></p>`;
+}
+
+// 左：いま触れている素材の記述
+function renderItemMemo() {
+    const box = document.getElementById('item-memo');
+    const it = itemById.get(state.memoItem);
+    if (!it) {
+        box.innerHTML = '<p class="memo-empty">素材を押すと、<br>祖母の書き付けが出てくる。</p>';
+        return;
+    }
+    box.innerHTML =
+        `<p class="memo-source">${catById.get(it.categoryId)?.name || ''}　${it.form || ''}</p>` +
+        `<p class="memo-title">${it.name}</p>` +
+        `<p class="memo-body">${it.note || it.description || '書き付けは残っていない。'}</p>` +
+        (it.description && it.note ? `<p class="memo-meta">${it.description}</p>` : '');
+}
+
+// 右：いま開いている紙片
+function renderSlipMemo() {
     const box = document.getElementById('memo-sheet');
-    const m = state.memo;
 
-    if (!m) {
-        box.innerHTML = '<p class="memo-empty">祖母が遺した書類の束。<br>' +
-            '上の綴じから一枚選ぶか、<br>素材を押せば中身が出てくる。</p>';
+    if (!state.memoSlip) {
+        if (state.slipMissingFor) {
+            box.innerHTML =
+                `<p class="memo-source">調合：</p>` +
+                `<p class="memo-title">${state.slipMissingFor}</p>` +
+                `<p class="memo-empty">これについての紙片は手元にない。<br>祖母も書き残さなかったらしい。</p>`;
+        } else {
+            box.innerHTML = '<p class="memo-empty">祖母が遺した書類の束。<br>上の綴じから一枚選ぶ。</p>';
+        }
         return;
     }
 
-    if (m.kind === 'item') {
-        const it = itemById.get(m.key);
-        if (!it) return;
-        box.innerHTML =
-            `<p class="memo-source">${catById.get(it.categoryId)?.name || ''}　${it.form || ''}</p>` +
-            `<p class="memo-title">${it.name}</p>` +
-            `<p class="memo-body">${it.note || it.description || '書き付けは残っていない。'}</p>` +
-            (it.description && it.note ? `<p class="memo-meta">${it.description}</p>` : '');
-        return;
-    }
-
-    const h = heldSlips().find(x => slipKey(x) === m.key);
-    if (!h) {
-        box.innerHTML =
-            `<p class="memo-source">調合：</p>` +
-            `<p class="memo-title">${m.result || '？？？'}</p>` +
-            `<p class="memo-empty">これについての紙片は手元にない。<br>祖母も書き残さなかったらしい。</p>`;
-        return;
-    }
+    const h = heldSlips().find(x => slipKey(x) === state.memoSlip);
+    if (!h) { state.memoSlip = null; return renderSlipMemo(); }
 
     const solved = state.unlockedRecipes.includes(h.result);
     const doubt = h.reliability && h.reliability !== '確か'
@@ -561,8 +751,17 @@ function renderMemo() {
         `<p class="memo-source">${h.source}：</p>` +
         `<p class="memo-title">${h.title}</p>` +
         `<p class="memo-body">${h.text}</p>` +
+        slipFacts(h.result) +
         `<p class="memo-meta">${solved ? `これは「${h.result}」の作り方だった。　` : ''}` +
         (doubt ? `この記述は ${doubt}` : '') + `</p>`;
 }
 
-document.addEventListener('DOMContentLoaded', init);
+document.addEventListener('DOMContentLoaded', () => {
+    try {
+        init();
+        window.__bootOK = true;
+    } catch (err) {
+        window.__bootError = err;
+        console.error(err);
+    }
+});

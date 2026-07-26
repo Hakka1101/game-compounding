@@ -20,6 +20,26 @@
       <p class="game-subtitle">草木と鉱物の覚え書き</p>
     </header>
 
+    <div class="day-bar">
+      <div class="day-left">
+        <span class="day-date" id="day-date"></span>
+        <span class="day-moon" id="day-moon"></span>
+        <span class="day-remaining" id="day-remaining"></span>
+      </div>
+      <div class="day-right">
+        <span class="day-money">所持金 <b id="money">0</b></span>
+        <span class="day-turns" id="day-turns"></span>
+        <button class="btn-rest" id="btn-rest">休む（日を送る）</button>
+        <button class="btn-next-day hidden" id="btn-next-day">翌日へ</button>
+      </div>
+    </div>
+
+    <nav class="view-tabs" role="tablist">
+      <button class="view-tab active" data-view="craft" role="tab">調合所</button>
+      <button class="view-tab" data-view="explore" role="tab">採取に出る</button>
+      <button class="view-tab" data-view="shop" role="tab">店</button>
+    </nav>
+
     <main class="game-main">
 
       <!-- ── 左：素材 ── -->
@@ -34,6 +54,11 @@
 
         <ul class="item-list" id="item-list"></ul>
         <p class="column-note">棚に <span id="item-total">0 種</span></p>
+
+        <div class="side-section">
+          <h2 class="column-title">素材の覚え書き</h2>
+          <div class="memo-sheet item-memo" id="item-memo"></div>
+        </div>
       </section>
 
       <!-- ── 中央：調合台 ── -->
@@ -62,13 +87,28 @@
           <button class="btn-compound" id="btn-compound">調合する</button>
           <button class="btn-reset" id="btn-reset">やり直す</button>
         </div>
+
+        <div class="result-panel" id="result-display">
+          <div class="result-state" id="state-waiting">
+            <p class="result-sub-text">素材と工程、そして器を選び、調合を試みる。</p>
+          </div>
+          <div class="result-state hidden" id="state-success">
+            <p class="result-badge">できあがった</p>
+            <p class="result-product-name" id="result-product-name"></p>
+            <p class="result-product-desc" id="result-product-desc"></p>
+          </div>
+          <div class="result-state hidden" id="state-failure">
+            <p class="result-badge failure-badge">しくじった</p>
+            <p class="result-sub-text">素材が濁り合い、名の付けようがないものになった。</p>
+          </div>
+        </div>
       </section>
 
       <!-- ── 右：覚え書き → 解いた調合 → 結果 ── -->
       <section id="panel-notes">
 
         <div class="right-section">
-          <h2 class="column-title">覚え書き<span class="rb-count" id="slip-count">0 枚</span></h2>
+          <h2 class="column-title">調合の紙片<span class="rb-count" id="slip-count">0 枚</span></h2>
 
           <div class="slip-tools">
             <div class="filter-btns" id="slip-filters" role="group" aria-label="出所で絞る"></div>
@@ -83,37 +123,120 @@
           <div class="rb-body" id="recipe-book"></div>
         </div>
 
-        <div class="right-section">
-          <h2 class="column-title">結果</h2>
-          <div class="result-panel" id="result-display">
-
-            <div class="result-state" id="state-waiting">
-              <p class="result-sub-text">素材と工程、そして器を選び、<br>調合を試みる。</p>
-            </div>
-
-            <div class="result-state hidden" id="state-success">
-              <p class="result-badge">できあがった</p>
-              <p class="result-product-name" id="result-product-name"></p>
-              <p class="result-product-desc" id="result-product-desc"></p>
-            </div>
-
-            <div class="result-state hidden" id="state-failure">
-              <p class="result-badge failure-badge">しくじった</p>
-              <p class="result-sub-text">素材が濁り合い、<br>名の付けようがないものになった。</p>
-            </div>
-
-          </div>
-        </div>
-
       </section>
 
     </main>
+
+    <section class="explore-view hidden" id="view-explore">
+
+      <!-- 出かける前 -->
+      <div id="phase-before">
+        <div class="explore-top">
+          <div class="explore-choose">
+            <h2 class="column-title">時間帯</h2>
+            <div class="slot-btns" id="timeslot-btns" role="group" aria-label="出かける時間帯"></div>
+            <p class="choose-note" id="timeslot-note"></p>
+          </div>
+          <div class="explore-choose">
+            <h2 class="column-title">向かう場所</h2>
+            <div class="area-btns" id="area-btns" role="group" aria-label="向かう場所"></div>
+            <p class="choose-note" id="area-note"></p>
+          </div>
+        </div>
+
+        <div class="rest-block">
+          <h2 class="column-title">出かけない</h2>
+          <button class="btn-rest-big" id="btn-rest-big">今日は休む</button>
+          <p class="choose-note" id="rest-note"></p>
+        </div>
+      </div>
+
+      <!-- 探索中 -->
+      <div id="phase-out" class="hidden">
+        <div class="out-bar">
+          <span class="out-slot" id="out-slot"></span>
+          <div class="area-btns" id="area-btns-out" role="group" aria-label="移る場所"></div>
+          <button class="btn-home" id="btn-home">切り上げて帰る</button>
+        </div>
+        <div class="explore-main">
+          <div class="map-pane">
+            <div class="map-grid" id="map-grid"></div>
+            <div class="map-legend" id="map-legend"></div>
+          </div>
+          <div class="log-pane">
+            <h2 class="column-title">今日の記録</h2>
+            <div class="explore-log" id="explore-log"></div>
+          </div>
+        </div>
+      </div>
+
+      <!-- 帰宅後 -->
+      <div id="phase-after" class="hidden">
+        <h2 class="column-title">今日の収穫<span class="rb-count" id="haul-summary"></span></h2>
+        <ul class="haul-list" id="haul-list"></ul>
+        <p class="choose-note">工房に戻れば、持ち帰ったもので調合ができる。</p>
+      </div>
+
+    </section>
+
+    <!-- ── 店 ── -->
+    <section class="shop-view hidden" id="view-shop">
+      <p class="shop-closed hidden" id="shop-closed">外に出ている間は店を開けられない。</p>
+
+      <div id="shop-body">
+        <div class="buyer-area hidden" id="buyer-area">
+          <h2 class="column-title buyer-title">日の落ちてから、戸を叩く音</h2>
+          <p class="buyer-text">名乗らない客が立っている。買いたいものがあるという。何を、とは訊かなかった。</p>
+          <ul class="trade-list" id="buyer-list"></ul>
+          <button class="btn-refuse" id="btn-refuse">今日は売るものがないと言う</button>
+        </div>
+
+        <div class="shop-grid">
+          <div>
+            <h2 class="column-title">売る</h2>
+            <ul class="trade-list" id="sell-list"></ul>
+            <p class="choose-note" id="sell-note"></p>
+          </div>
+          <div>
+            <h2 class="column-title">買う</h2>
+            <ul class="trade-list" id="buy-list"></ul>
+            <p class="choose-note">同じものを売り続けると、店が仕入れるようになる。</p>
+          </div>
+          <div>
+            <h2 class="column-title">行商人</h2>
+            <ul class="trade-list" id="merchant-list"></ul>
+            <p class="choose-note">祖母の家には無かった書き物を持ってくる。</p>
+          </div>
+        </div>
+      </div>
+    </section>
+
+    <!-- ── 朝の出来事 ── -->
+    <div class="overlay hidden" id="event-overlay">
+      <div class="overlay-box">
+        <h2 class="overlay-title" id="event-title"></h2>
+        <p class="overlay-text" id="event-text"></p>
+        <button class="btn-compound" id="btn-event-ok">読んだ</button>
+      </div>
+    </div>
+
+    <!-- ── 結末 ── -->
+    <div class="overlay hidden" id="ending-overlay">
+      <div class="overlay-box ending-box">
+        <p class="ending-lead">一年が過ぎた。</p>
+        <h2 class="overlay-title" id="ending-title"></h2>
+        <p class="overlay-text" id="ending-text"></p>
+        <ul class="ending-notes" id="ending-notes"></ul>
+        <button class="btn-compound" id="btn-ending-ok">最初から始める</button>
+      </div>
+    </div>
 
     <footer class="game-footer">
       <span><span class="footer-key">素材</span>押して出し入れ</span>
       <span><span class="footer-key">工程</span>素材ごとに決める</span>
       <span><span class="footer-key">器</span>剤形に合わせる</span>
       <span><span class="footer-key">覚え書き</span>素材や調合を押すと出る</span>
+      <span><button class="footer-btn" id="btn-save-menu">保存</button></span>
     </footer>
 
   </div>
@@ -124,7 +247,61 @@
   <script src="data_items.js"></script>
   <script src="data_recipes.js"></script>
   <script src="data_hints.js"></script>
+  <script src="data_calendar.js"></script>
+  <script src="calendar.js"></script>
+  <script src="data_terrains.js"></script>
+  <script src="data_spawns.js"></script>
+  <script src="explore.js"></script>
+  <script src="data_flags.js"></script>
+  <script src="data_events.js"></script>
+  <script src="data_endings.js"></script>
+  <script src="progress.js"></script>
+  <script src="shop.js"></script>
   <script src="main.js"></script>
+
+  <!-- 起動できたか確かめる。ファイルが一つでも欠けると全ての操作が死ぬので、
+       黙って止まらずに何が足りないかを画面に出す。
+       const で宣言された値は window に乗らないため、識別子を直接評価して調べる。 -->
+  <script>
+  (function () {
+    var need = [
+      ['dataCategories',  'data_categories.js'],
+      ['data_effects',    'data_effects.js'],
+      ['PROCESSES_DATA',  'data_processes.js'],
+      ['ITEMS_DATA',      'data_items.js'],
+      ['RECIPES_DATA',    'data_recipes.js'],
+      ['HINTS_DATA',      'data_hints.js'],
+      ['CALENDAR_DATA',   'data_calendar.js'],
+      ['dateOf',          'calendar.js'],
+      ['TERRAINS_DATA',   'data_terrains.js'],
+      ['SPAWNS_DATA',     'data_spawns.js'],
+      ['startDay',        'explore.js'],
+      ['FLAGS_DATA',      'data_flags.js'],
+      ['EVENTS_DATA',     'data_events.js'],
+      ['ENDINGS_DATA',    'data_endings.js'],
+      ['flagMet',         'progress.js'],
+      ['renderShop',      'shop.js'],
+      ['checkRecipe',     'main.js']
+    ];
+    function has(name) {
+      try { return eval('typeof ' + name) !== 'undefined'; } catch (e) { return false; }
+    }
+    function report() {
+      var missing = [];
+      for (var i = 0; i < need.length; i++) if (!has(need[i][0])) missing.push(need[i][1]);
+      if (!missing.length && window.__bootOK) return;
+      var box = document.createElement('div');
+      box.className = 'boot-error';
+      box.innerHTML = missing.length
+        ? '<b>起動できませんでした。</b><br>次のファイルが index.html と同じ場所にありません：<br><code>'
+          + missing.join('</code>\u3000<code>') + '</code>'
+        : '<b>起動時にエラーが起きました。</b><br><code>'
+          + ((window.__bootError && window.__bootError.message) || '不明') + '</code>';
+      document.body.insertBefore(box, document.body.firstChild);
+    }
+    window.addEventListener('load', report);
+  })();
+  </script>
 
 </body>
 </html>

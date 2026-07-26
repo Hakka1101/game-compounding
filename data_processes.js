@@ -1,5 +1,5 @@
 // 工程定義
-// tools/convert.py により game_data_v7.xlsx から自動生成。直接編集しないこと。
+// tools/convert.py により game_data_v25.xlsx から自動生成。直接編集しないこと。
 const PROCESSES_DATA = [
   {
     "id": "grind",

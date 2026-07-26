@@ -1,5 +1,5 @@
 // レシピ定義
-// tools/convert.py により game_data_v13.xlsx から自動生成。直接編集しないこと。
+// tools/convert.py により game_data_v25.xlsx から自動生成。直接編集しないこと。
 const RECIPES_DATA = [
   {
     "result": "加速の秘薬",

@@ -1,5 +1,5 @@
 // アイテム定義
-// tools/convert.py により game_data_v13.xlsx から自動生成。直接編集しないこと。
+// tools/convert.py により game_data_v25.xlsx から自動生成。直接編集しないこと。
 const ITEMS_DATA = [
   {
     "id": "item_001",
@@ -13,7 +13,8 @@ const ITEMS_DATA = [
     "price": 8,
     "use": "素材",
     "shopUnlock": 200,
-    "form": "素材"
+    "form": "素材",
+    "danger": "無害"
   },
   {
     "id": "item_002",
@@ -27,7 +28,8 @@ const ITEMS_DATA = [
     "price": 8,
     "use": "素材",
     "shopUnlock": 200,
-    "form": "素材"
+    "form": "素材",
+    "danger": "無害"
   },
   {
     "id": "item_003",
@@ -41,7 +43,8 @@ const ITEMS_DATA = [
     "price": 8,
     "use": "素材",
     "shopUnlock": null,
-    "form": "素材"
+    "form": "素材",
+    "danger": "無害"
   },
   {
     "id": "item_004",
@@ -55,7 +58,8 @@ const ITEMS_DATA = [
     "price": 8,
     "use": "素材",
     "shopUnlock": 200,
-    "form": "素材"
+    "form": "素材",
+    "danger": "無害"
   },
   {
     "id": "item_005",
@@ -69,7 +73,8 @@ const ITEMS_DATA = [
     "price": 8,
     "use": "素材",
     "shopUnlock": 200,
-    "form": "素材"
+    "form": "素材",
+    "danger": "無害"
   },
   {
     "id": "item_006",
@@ -83,7 +88,8 @@ const ITEMS_DATA = [
     "price": 8,
     "use": "素材",
     "shopUnlock": 200,
-    "form": "素材"
+    "form": "素材",
+    "danger": "無害"
   },
   {
     "id": "item_007",
@@ -97,7 +103,8 @@ const ITEMS_DATA = [
     "price": 8,
     "use": "素材",
     "shopUnlock": 200,
-    "form": "素材"
+    "form": "素材",
+    "danger": "無害"
   },
   {
     "id": "item_008",
@@ -111,7 +118,8 @@ const ITEMS_DATA = [
     "price": 8,
     "use": "素材",
     "shopUnlock": null,
-    "form": "素材"
+    "form": "素材",
+    "danger": "無害"
   },
   {
     "id": "item_009",
@@ -125,7 +133,8 @@ const ITEMS_DATA = [
     "price": 8,
     "use": "素材",
     "shopUnlock": 200,
-    "form": "素材"
+    "form": "素材",
+    "danger": "無害"
   },
   {
     "id": "item_010",
@@ -139,7 +148,8 @@ const ITEMS_DATA = [
     "price": 8,
     "use": "素材",
     "shopUnlock": 200,
-    "form": "素材"
+    "form": "素材",
+    "danger": "無害"
   },
   {
     "id": "item_011",
@@ -153,7 +163,8 @@ const ITEMS_DATA = [
     "price": 8,
     "use": "素材",
     "shopUnlock": 200,
-    "form": "素材"
+    "form": "素材",
+    "danger": "無害"
   },
   {
     "id": "item_012",
@@ -167,7 +178,8 @@ const ITEMS_DATA = [
     "price": 8,
     "use": "素材",
     "shopUnlock": 200,
-    "form": "素材"
+    "form": "素材",
+    "danger": "無害"
   },
   {
     "id": "item_013",
@@ -181,7 +193,8 @@ const ITEMS_DATA = [
     "price": 8,
     "use": "素材",
     "shopUnlock": null,
-    "form": "素材"
+    "form": "素材",
+    "danger": "無害"
   },
   {
     "id": "item_014",
@@ -195,7 +208,8 @@ const ITEMS_DATA = [
     "price": 8,
     "use": "素材",
     "shopUnlock": null,
-    "form": "素材"
+    "form": "素材",
+    "danger": "無害"
   },
   {
     "id": "item_015",
@@ -209,7 +223,8 @@ const ITEMS_DATA = [
     "price": 8,
     "use": "素材",
     "shopUnlock": 200,
-    "form": "素材"
+    "form": "素材",
+    "danger": "無害"
   },
   {
     "id": "item_016",
@@ -223,7 +238,8 @@ const ITEMS_DATA = [
     "price": 8,
     "use": "素材",
     "shopUnlock": 200,
-    "form": "素材"
+    "form": "素材",
+    "danger": "無害"
   },
   {
     "id": "item_017",
@@ -237,7 +253,8 @@ const ITEMS_DATA = [
     "price": 8,
     "use": "素材",
     "shopUnlock": 200,
-    "form": "素材"
+    "form": "素材",
+    "danger": "無害"
   },
   {
     "id": "item_018",
@@ -251,7 +268,8 @@ const ITEMS_DATA = [
     "price": 8,
     "use": "素材",
     "shopUnlock": 200,
-    "form": "素材"
+    "form": "素材",
+    "danger": "無害"
   },
   {
     "id": "item_019",
@@ -265,7 +283,8 @@ const ITEMS_DATA = [
     "price": 8,
     "use": "素材",
     "shopUnlock": 200,
-    "form": "素材"
+    "form": "素材",
+    "danger": "無害"
   },
   {
     "id": "item_020",
@@ -279,7 +298,8 @@ const ITEMS_DATA = [
     "price": 8,
     "use": "素材",
     "shopUnlock": 200,
-    "form": "素材"
+    "form": "素材",
+    "danger": "無害"
   },
   {
     "id": "item_021",
@@ -293,7 +313,8 @@ const ITEMS_DATA = [
     "price": 8,
     "use": "素材",
     "shopUnlock": 200,
-    "form": "素材"
+    "form": "素材",
+    "danger": "無害"
   },
   {
     "id": "item_022",
@@ -307,7 +328,8 @@ const ITEMS_DATA = [
     "price": 8,
     "use": "素材",
     "shopUnlock": 200,
-    "form": "素材"
+    "form": "素材",
+    "danger": "無害"
   },
   {
     "id": "item_023",
@@ -321,7 +343,8 @@ const ITEMS_DATA = [
     "price": 8,
     "use": "素材",
     "shopUnlock": 200,
-    "form": "素材"
+    "form": "素材",
+    "danger": "無害"
   },
   {
     "id": "item_024",
@@ -335,7 +358,8 @@ const ITEMS_DATA = [
     "price": 8,
     "use": "素材",
     "shopUnlock": null,
-    "form": "素材"
+    "form": "素材",
+    "danger": "無害"
   },
   {
     "id": "item_025",
@@ -349,7 +373,8 @@ const ITEMS_DATA = [
     "price": 8,
     "use": "素材",
     "shopUnlock": null,
-    "form": "素材"
+    "form": "素材",
+    "danger": "無害"
   },
   {
     "id": "item_026",
@@ -363,7 +388,8 @@ const ITEMS_DATA = [
     "price": 8,
     "use": "素材",
     "shopUnlock": null,
-    "form": "素材"
+    "form": "素材",
+    "danger": "無害"
   },
   {
     "id": "item_027",
@@ -377,7 +403,8 @@ const ITEMS_DATA = [
     "price": 8,
     "use": "素材",
     "shopUnlock": 200,
-    "form": "素材"
+    "form": "素材",
+    "danger": "無害"
   },
   {
     "id": "item_028",
@@ -391,7 +418,8 @@ const ITEMS_DATA = [
     "price": 8,
     "use": "素材",
     "shopUnlock": 200,
-    "form": "素材"
+    "form": "素材",
+    "danger": "無害"
   },
   {
     "id": "item_029",
@@ -405,7 +433,8 @@ const ITEMS_DATA = [
     "price": 8,
     "use": "素材",
     "shopUnlock": 200,
-    "form": "素材"
+    "form": "素材",
+    "danger": "無害"
   },
   {
     "id": "item_030",
@@ -419,7 +448,8 @@ const ITEMS_DATA = [
     "price": 8,
     "use": "素材",
     "shopUnlock": 200,
-    "form": "素材"
+    "form": "素材",
+    "danger": "無害"
   },
   {
     "id": "item_031",
@@ -433,7 +463,8 @@ const ITEMS_DATA = [
     "price": 8,
     "use": "素材",
     "shopUnlock": 200,
-    "form": "素材"
+    "form": "素材",
+    "danger": "無害"
   },
   {
     "id": "item_032",
@@ -447,7 +478,8 @@ const ITEMS_DATA = [
     "price": 8,
     "use": "素材",
     "shopUnlock": null,
-    "form": "素材"
+    "form": "素材",
+    "danger": "無害"
   },
   {
     "id": "item_033",
@@ -461,7 +493,8 @@ const ITEMS_DATA = [
     "price": 8,
     "use": "素材",
     "shopUnlock": 200,
-    "form": "素材"
+    "form": "素材",
+    "danger": "無害"
   },
   {
     "id": "item_034",
@@ -475,7 +508,8 @@ const ITEMS_DATA = [
     "price": 8,
     "use": "素材",
     "shopUnlock": 200,
-    "form": "素材"
+    "form": "素材",
+    "danger": "無害"
   },
   {
     "id": "item_035",
@@ -489,7 +523,8 @@ const ITEMS_DATA = [
     "price": 8,
     "use": "素材",
     "shopUnlock": 200,
-    "form": "素材"
+    "form": "素材",
+    "danger": "無害"
   },
   {
     "id": "item_036",
@@ -503,7 +538,8 @@ const ITEMS_DATA = [
     "price": 8,
     "use": "素材",
     "shopUnlock": null,
-    "form": "素材"
+    "form": "素材",
+    "danger": "無害"
   },
   {
     "id": "item_037",
@@ -517,7 +553,8 @@ const ITEMS_DATA = [
     "price": 8,
     "use": "素材",
     "shopUnlock": null,
-    "form": "素材"
+    "form": "素材",
+    "danger": "無害"
   },
   {
     "id": "item_038",
@@ -531,7 +568,8 @@ const ITEMS_DATA = [
     "price": 8,
     "use": "素材",
     "shopUnlock": 200,
-    "form": "素材"
+    "form": "素材",
+    "danger": "無害"
   },
   {
     "id": "item_039",
@@ -545,7 +583,8 @@ const ITEMS_DATA = [
     "price": 8,
     "use": "素材",
     "shopUnlock": 200,
-    "form": "素材"
+    "form": "素材",
+    "danger": "無害"
   },
   {
     "id": "item_040",
@@ -559,7 +598,8 @@ const ITEMS_DATA = [
     "price": 8,
     "use": "素材",
     "shopUnlock": 200,
-    "form": "素材"
+    "form": "素材",
+    "danger": "無害"
   },
   {
     "id": "item_041",
@@ -573,7 +613,8 @@ const ITEMS_DATA = [
     "price": 8,
     "use": "素材",
     "shopUnlock": 200,
-    "form": "素材"
+    "form": "素材",
+    "danger": "無害"
   },
   {
     "id": "item_042",
@@ -587,7 +628,8 @@ const ITEMS_DATA = [
     "price": 8,
     "use": "素材",
     "shopUnlock": 200,
-    "form": "素材"
+    "form": "素材",
+    "danger": "無害"
   },
   {
     "id": "item_043",
@@ -601,7 +643,8 @@ const ITEMS_DATA = [
     "price": 8,
     "use": "素材",
     "shopUnlock": 200,
-    "form": "素材"
+    "form": "素材",
+    "danger": "無害"
   },
   {
     "id": "item_044",
@@ -615,7 +658,8 @@ const ITEMS_DATA = [
     "price": 8,
     "use": "素材",
     "shopUnlock": 200,
-    "form": "素材"
+    "form": "素材",
+    "danger": "無害"
   },
   {
     "id": "item_045",
@@ -629,7 +673,8 @@ const ITEMS_DATA = [
     "price": 8,
     "use": "素材",
     "shopUnlock": 200,
-    "form": "素材"
+    "form": "素材",
+    "danger": "無害"
   },
   {
     "id": "item_046",
@@ -643,7 +688,8 @@ const ITEMS_DATA = [
     "price": 8,
     "use": "素材",
     "shopUnlock": 200,
-    "form": "素材"
+    "form": "素材",
+    "danger": "無害"
   },
   {
     "id": "item_047",
@@ -657,7 +703,8 @@ const ITEMS_DATA = [
     "price": 8,
     "use": "素材",
     "shopUnlock": 200,
-    "form": "素材"
+    "form": "素材",
+    "danger": "無害"
   },
   {
     "id": "item_048",
@@ -671,7 +718,8 @@ const ITEMS_DATA = [
     "price": 8,
     "use": "素材",
     "shopUnlock": 200,
-    "form": "素材"
+    "form": "素材",
+    "danger": "無害"
   },
   {
     "id": "item_049",
@@ -685,7 +733,8 @@ const ITEMS_DATA = [
     "price": 8,
     "use": "素材",
     "shopUnlock": 200,
-    "form": "素材"
+    "form": "素材",
+    "danger": "無害"
   },
   {
     "id": "item_050",
@@ -699,7 +748,8 @@ const ITEMS_DATA = [
     "price": 8,
     "use": "素材",
     "shopUnlock": null,
-    "form": "素材"
+    "form": "素材",
+    "danger": "無害"
   },
   {
     "id": "item_051",
@@ -713,7 +763,8 @@ const ITEMS_DATA = [
     "price": 8,
     "use": "素材",
     "shopUnlock": 200,
-    "form": "素材"
+    "form": "素材",
+    "danger": "無害"
   },
   {
     "id": "item_052",
@@ -727,7 +778,8 @@ const ITEMS_DATA = [
     "price": 8,
     "use": "素材",
     "shopUnlock": null,
-    "form": "素材"
+    "form": "素材",
+    "danger": "無害"
   },
   {
     "id": "item_053",
@@ -741,7 +793,8 @@ const ITEMS_DATA = [
     "price": 8,
     "use": "素材",
     "shopUnlock": 200,
-    "form": "素材"
+    "form": "素材",
+    "danger": "無害"
   },
   {
     "id": "item_054",
@@ -755,7 +808,8 @@ const ITEMS_DATA = [
     "price": 8,
     "use": "素材",
     "shopUnlock": 200,
-    "form": "素材"
+    "form": "素材",
+    "danger": "無害"
   },
   {
     "id": "item_055",
@@ -769,7 +823,8 @@ const ITEMS_DATA = [
     "price": 8,
     "use": "素材",
     "shopUnlock": null,
-    "form": "素材"
+    "form": "素材",
+    "danger": "無害"
   },
   {
     "id": "item_056",
@@ -783,7 +838,8 @@ const ITEMS_DATA = [
     "price": 8,
     "use": "素材",
     "shopUnlock": 200,
-    "form": "素材"
+    "form": "素材",
+    "danger": "無害"
   },
   {
     "id": "item_057",
@@ -797,7 +853,8 @@ const ITEMS_DATA = [
     "price": 8,
     "use": "素材",
     "shopUnlock": null,
-    "form": "素材"
+    "form": "素材",
+    "danger": "無害"
   },
   {
     "id": "item_058",
@@ -811,7 +868,8 @@ const ITEMS_DATA = [
     "price": 8,
     "use": "素材",
     "shopUnlock": null,
-    "form": "素材"
+    "form": "素材",
+    "danger": "無害"
   },
   {
     "id": "item_059",
@@ -825,7 +883,8 @@ const ITEMS_DATA = [
     "price": 25,
     "use": "素材",
     "shopUnlock": 100,
-    "form": "液体"
+    "form": "液体",
+    "danger": "無害"
   },
   {
     "id": "item_060",
@@ -839,7 +898,8 @@ const ITEMS_DATA = [
     "price": 60,
     "use": "素材",
     "shopUnlock": 50,
-    "form": "液体"
+    "form": "液体",
+    "danger": "無害"
   },
   {
     "id": "item_061",
@@ -853,7 +913,8 @@ const ITEMS_DATA = [
     "price": 140,
     "use": "素材",
     "shopUnlock": 20,
-    "form": "液体"
+    "form": "液体",
+    "danger": "無害"
   },
   {
     "id": "item_062",
@@ -867,7 +928,8 @@ const ITEMS_DATA = [
     "price": 40,
     "use": "素材",
     "shopUnlock": 50,
-    "form": "液体"
+    "form": "液体",
+    "danger": "無害"
   },
   {
     "id": "item_063",
@@ -881,7 +943,8 @@ const ITEMS_DATA = [
     "price": 45,
     "use": "素材",
     "shopUnlock": 50,
-    "form": "液体"
+    "form": "液体",
+    "danger": "無害"
   },
   {
     "id": "item_064",
@@ -895,7 +958,8 @@ const ITEMS_DATA = [
     "price": 35,
     "use": "素材",
     "shopUnlock": 50,
-    "form": "液体"
+    "form": "液体",
+    "danger": "無害"
   },
   {
     "id": "item_065",
@@ -909,7 +973,8 @@ const ITEMS_DATA = [
     "price": 40,
     "use": "素材",
     "shopUnlock": 50,
-    "form": "液体"
+    "form": "液体",
+    "danger": "無害"
   },
   {
     "id": "item_066",
@@ -923,7 +988,8 @@ const ITEMS_DATA = [
     "price": 150,
     "use": "素材",
     "shopUnlock": 20,
-    "form": "固形"
+    "form": "固形",
+    "danger": "無害"
   },
   {
     "id": "item_067",
@@ -937,7 +1003,8 @@ const ITEMS_DATA = [
     "price": 70,
     "use": "素材",
     "shopUnlock": 50,
-    "form": "固形"
+    "form": "固形",
+    "danger": "無害"
   },
   {
     "id": "item_068",
@@ -951,7 +1018,8 @@ const ITEMS_DATA = [
     "price": 10,
     "use": "素材",
     "shopUnlock": 100,
-    "form": "粉末"
+    "form": "粉末",
+    "danger": "無害"
   },
   {
     "id": "item_069",
@@ -965,7 +1033,8 @@ const ITEMS_DATA = [
     "price": 12,
     "use": "素材",
     "shopUnlock": 100,
-    "form": "粉末"
+    "form": "粉末",
+    "danger": "無害"
   },
   {
     "id": "item_070",
@@ -979,7 +1048,8 @@ const ITEMS_DATA = [
     "price": 30,
     "use": "素材",
     "shopUnlock": 100,
-    "form": "粉末"
+    "form": "粉末",
+    "danger": "無害"
   },
   {
     "id": "item_071",
@@ -993,7 +1063,8 @@ const ITEMS_DATA = [
     "price": 18,
     "use": "素材",
     "shopUnlock": 100,
-    "form": "粉末"
+    "form": "粉末",
+    "danger": "無害"
   },
   {
     "id": "item_072",
@@ -1007,7 +1078,8 @@ const ITEMS_DATA = [
     "price": 20,
     "use": "素材",
     "shopUnlock": 100,
-    "form": "粉末"
+    "form": "粉末",
+    "danger": "無害"
   },
   {
     "id": "item_073",
@@ -1021,7 +1093,8 @@ const ITEMS_DATA = [
     "price": 45,
     "use": "素材",
     "shopUnlock": 50,
-    "form": "粉末"
+    "form": "粉末",
+    "danger": "無害"
   },
   {
     "id": "item_074",
@@ -1035,7 +1108,8 @@ const ITEMS_DATA = [
     "price": 25,
     "use": "素材",
     "shopUnlock": 100,
-    "form": "粉末"
+    "form": "粉末",
+    "danger": "無害"
   },
   {
     "id": "item_075",
@@ -1049,7 +1123,8 @@ const ITEMS_DATA = [
     "price": 22,
     "use": "素材",
     "shopUnlock": 100,
-    "form": "固形"
+    "form": "固形",
+    "danger": "無害"
   },
   {
     "id": "item_076",
@@ -1063,7 +1138,8 @@ const ITEMS_DATA = [
     "price": 25,
     "use": "素材",
     "shopUnlock": 100,
-    "form": "液体"
+    "form": "液体",
+    "danger": "無害"
   },
   {
     "id": "item_077",
@@ -1077,7 +1153,8 @@ const ITEMS_DATA = [
     "price": 35,
     "use": "素材",
     "shopUnlock": 50,
-    "form": "液体"
+    "form": "液体",
+    "danger": "無害"
   },
   {
     "id": "item_078",
@@ -1091,7 +1168,8 @@ const ITEMS_DATA = [
     "price": 50,
     "use": "素材",
     "shopUnlock": 50,
-    "form": "固形"
+    "form": "固形",
+    "danger": "無害"
   },
   {
     "id": "item_079",
@@ -1105,7 +1183,8 @@ const ITEMS_DATA = [
     "price": 75,
     "use": "素材",
     "shopUnlock": 50,
-    "form": "液体"
+    "form": "液体",
+    "danger": "無害"
   },
   {
     "id": "item_080",
@@ -1119,7 +1198,8 @@ const ITEMS_DATA = [
     "price": 90,
     "use": "素材",
     "shopUnlock": 20,
-    "form": "液体"
+    "form": "液体",
+    "danger": "無害"
   },
   {
     "id": "item_081",
@@ -1133,7 +1213,8 @@ const ITEMS_DATA = [
     "price": 130,
     "use": "素材",
     "shopUnlock": 20,
-    "form": "液体"
+    "form": "液体",
+    "danger": "要注意"
   },
   {
     "id": "item_082",
@@ -1147,7 +1228,8 @@ const ITEMS_DATA = [
     "price": 180,
     "use": "素材",
     "shopUnlock": 10,
-    "form": "固形"
+    "form": "固形",
+    "danger": "無害"
   },
   {
     "id": "item_083",
@@ -1161,7 +1243,8 @@ const ITEMS_DATA = [
     "price": 80,
     "use": "素材",
     "shopUnlock": 50,
-    "form": "液体"
+    "form": "液体",
+    "danger": "無害"
   },
   {
     "id": "item_084",
@@ -1175,7 +1258,8 @@ const ITEMS_DATA = [
     "price": 95,
     "use": "素材",
     "shopUnlock": 20,
-    "form": "液体"
+    "form": "液体",
+    "danger": "無害"
   },
   {
     "id": "item_085",
@@ -1189,7 +1273,8 @@ const ITEMS_DATA = [
     "price": 35,
     "use": "素材",
     "shopUnlock": 50,
-    "form": "粉末"
+    "form": "粉末",
+    "danger": "無害"
   },
   {
     "id": "item_086",
@@ -1203,7 +1288,8 @@ const ITEMS_DATA = [
     "price": 60,
     "use": "素材",
     "shopUnlock": 50,
-    "form": "液体"
+    "form": "液体",
+    "danger": "無害"
   },
   {
     "id": "item_087",
@@ -1217,7 +1303,8 @@ const ITEMS_DATA = [
     "price": 60,
     "use": "素材",
     "shopUnlock": 50,
-    "form": "液体"
+    "form": "液体",
+    "danger": "無害"
   },
   {
     "id": "item_088",
@@ -1231,7 +1318,8 @@ const ITEMS_DATA = [
     "price": 30,
     "use": "素材",
     "shopUnlock": 0,
-    "form": "素材"
+    "form": "素材",
+    "danger": "無害"
   },
   {
     "id": "item_089",
@@ -1245,7 +1333,8 @@ const ITEMS_DATA = [
     "price": 15,
     "use": "素材",
     "shopUnlock": 150,
-    "form": "素材"
+    "form": "素材",
+    "danger": "無害"
   },
   {
     "id": "item_090",
@@ -1259,7 +1348,8 @@ const ITEMS_DATA = [
     "price": 25,
     "use": "素材",
     "shopUnlock": 100,
-    "form": "素材"
+    "form": "素材",
+    "danger": "無害"
   },
   {
     "id": "item_091",
@@ -1273,7 +1363,8 @@ const ITEMS_DATA = [
     "price": 10,
     "use": "素材",
     "shopUnlock": 200,
-    "form": "素材"
+    "form": "素材",
+    "danger": "無害"
   },
   {
     "id": "item_092",
@@ -1287,7 +1378,8 @@ const ITEMS_DATA = [
     "price": 35,
     "use": "素材",
     "shopUnlock": 100,
-    "form": "素材"
+    "form": "素材",
+    "danger": "無害"
   },
   {
     "id": "item_093",
@@ -1301,7 +1393,8 @@ const ITEMS_DATA = [
     "price": 120,
     "use": "素材",
     "shopUnlock": null,
-    "form": "素材"
+    "form": "素材",
+    "danger": "無害"
   },
   {
     "id": "item_094",
@@ -1315,7 +1408,8 @@ const ITEMS_DATA = [
     "price": 20,
     "use": "素材",
     "shopUnlock": 150,
-    "form": "素材"
+    "form": "素材",
+    "danger": "無害"
   },
   {
     "id": "item_095",
@@ -1329,7 +1423,8 @@ const ITEMS_DATA = [
     "price": 60,
     "use": "素材",
     "shopUnlock": null,
-    "form": "素材"
+    "form": "素材",
+    "danger": "無害"
   },
   {
     "id": "item_096",
@@ -1343,7 +1438,8 @@ const ITEMS_DATA = [
     "price": 110,
     "use": "消耗品",
     "shopUnlock": null,
-    "form": "気体"
+    "form": "気体",
+    "danger": "無害"
   },
   {
     "id": "item_097",
@@ -1357,7 +1453,8 @@ const ITEMS_DATA = [
     "price": 140,
     "use": "消耗品",
     "shopUnlock": null,
-    "form": "気体"
+    "form": "気体",
+    "danger": "要注意"
   },
   {
     "id": "item_098",
@@ -1371,7 +1468,8 @@ const ITEMS_DATA = [
     "price": 190,
     "use": "消耗品",
     "shopUnlock": null,
-    "form": "気体"
+    "form": "気体",
+    "danger": "無害"
   },
   {
     "id": "item_099",
@@ -1385,7 +1483,8 @@ const ITEMS_DATA = [
     "price": 210,
     "use": "消耗品",
     "shopUnlock": null,
-    "form": "気体"
+    "form": "気体",
+    "danger": "凶器"
   },
   {
     "id": "item_100",
@@ -1399,7 +1498,8 @@ const ITEMS_DATA = [
     "price": 130,
     "use": "消耗品",
     "shopUnlock": null,
-    "form": "気体"
+    "form": "気体",
+    "danger": "無害"
   },
   {
     "id": "item_101",
@@ -1413,7 +1513,8 @@ const ITEMS_DATA = [
     "price": 30,
     "use": "消耗品",
     "shopUnlock": null,
-    "form": "液体"
+    "form": "液体",
+    "danger": "無害"
   },
   {
     "id": "item_102",
@@ -1427,7 +1528,8 @@ const ITEMS_DATA = [
     "price": 30,
     "use": "消耗品",
     "shopUnlock": null,
-    "form": "液体"
+    "form": "液体",
+    "danger": "無害"
   },
   {
     "id": "item_103",
@@ -1441,7 +1543,8 @@ const ITEMS_DATA = [
     "price": 30,
     "use": "消耗品",
     "shopUnlock": null,
-    "form": "液体"
+    "form": "液体",
+    "danger": "無害"
   },
   {
     "id": "item_104",
@@ -1455,7 +1558,8 @@ const ITEMS_DATA = [
     "price": 45,
     "use": "消耗品",
     "shopUnlock": null,
-    "form": "固形"
+    "form": "固形",
+    "danger": "無害"
   },
   {
     "id": "item_105",
@@ -1469,7 +1573,8 @@ const ITEMS_DATA = [
     "price": 30,
     "use": "消耗品",
     "shopUnlock": null,
-    "form": "固形"
+    "form": "固形",
+    "danger": "無害"
   },
   {
     "id": "item_106",
@@ -1483,7 +1588,8 @@ const ITEMS_DATA = [
     "price": 45,
     "use": "消耗品",
     "shopUnlock": null,
-    "form": "液体"
+    "form": "液体",
+    "danger": "無害"
   },
   {
     "id": "item_107",
@@ -1497,7 +1603,8 @@ const ITEMS_DATA = [
     "price": 45,
     "use": "道具",
     "shopUnlock": null,
-    "form": "固形"
+    "form": "固形",
+    "danger": "無害"
   },
   {
     "id": "item_108",
@@ -1511,7 +1618,8 @@ const ITEMS_DATA = [
     "price": 430,
     "use": "消耗品",
     "shopUnlock": null,
-    "form": "液体"
+    "form": "液体",
+    "danger": "無害"
   },
   {
     "id": "item_109",
@@ -1525,7 +1633,8 @@ const ITEMS_DATA = [
     "price": 120,
     "use": "消耗品",
     "shopUnlock": null,
-    "form": "液体"
+    "form": "液体",
+    "danger": "無害"
   },
   {
     "id": "item_110",
@@ -1539,7 +1648,8 @@ const ITEMS_DATA = [
     "price": 80,
     "use": "消耗品",
     "shopUnlock": null,
-    "form": "固形"
+    "form": "固形",
+    "danger": "無害"
   },
   {
     "id": "item_111",
@@ -1553,7 +1663,8 @@ const ITEMS_DATA = [
     "price": 30,
     "use": "道具",
     "shopUnlock": null,
-    "form": "固形"
+    "form": "固形",
+    "danger": "凶器"
   },
   {
     "id": "item_112",
@@ -1567,7 +1678,8 @@ const ITEMS_DATA = [
     "price": 85,
     "use": "消耗品",
     "shopUnlock": null,
-    "form": "固形"
+    "form": "固形",
+    "danger": "無害"
   },
   {
     "id": "item_113",
@@ -1581,7 +1693,8 @@ const ITEMS_DATA = [
     "price": 310,
     "use": "道具",
     "shopUnlock": null,
-    "form": "液体"
+    "form": "液体",
+    "danger": "無害"
   },
   {
     "id": "item_114",
@@ -1595,7 +1708,8 @@ const ITEMS_DATA = [
     "price": 30,
     "use": "道具",
     "shopUnlock": null,
-    "form": "液体"
+    "form": "液体",
+    "danger": "要注意"
   },
   {
     "id": "item_115",
@@ -1609,7 +1723,8 @@ const ITEMS_DATA = [
     "price": 655,
     "use": "消耗品",
     "shopUnlock": null,
-    "form": "固形"
+    "form": "固形",
+    "danger": "要注意"
   },
   {
     "id": "item_116",
@@ -1623,7 +1738,8 @@ const ITEMS_DATA = [
     "price": 85,
     "use": "消耗品",
     "shopUnlock": null,
-    "form": "固形"
+    "form": "固形",
+    "danger": "無害"
   },
   {
     "id": "item_117",
@@ -1637,7 +1753,8 @@ const ITEMS_DATA = [
     "price": 30,
     "use": "道具",
     "shopUnlock": null,
-    "form": "粉末"
+    "form": "粉末",
+    "danger": "無害"
   },
   {
     "id": "item_118",
@@ -1651,7 +1768,8 @@ const ITEMS_DATA = [
     "price": 30,
     "use": "道具",
     "shopUnlock": null,
-    "form": "液体"
+    "form": "液体",
+    "danger": "無害"
   },
   {
     "id": "item_119",
@@ -1665,7 +1783,8 @@ const ITEMS_DATA = [
     "price": 360,
     "use": "消耗品",
     "shopUnlock": null,
-    "form": "固形"
+    "form": "固形",
+    "danger": "無害"
   },
   {
     "id": "item_120",
@@ -1679,7 +1798,8 @@ const ITEMS_DATA = [
     "price": 700,
     "use": "消耗品",
     "shopUnlock": null,
-    "form": "液体"
+    "form": "液体",
+    "danger": "無害"
   },
   {
     "id": "item_121",
@@ -1693,7 +1813,8 @@ const ITEMS_DATA = [
     "price": 165,
     "use": "消耗品",
     "shopUnlock": null,
-    "form": "固形"
+    "form": "固形",
+    "danger": "無害"
   },
   {
     "id": "item_122",
@@ -1707,7 +1828,8 @@ const ITEMS_DATA = [
     "price": 50,
     "use": "消耗品",
     "shopUnlock": null,
-    "form": "粉末"
+    "form": "粉末",
+    "danger": "無害"
   },
   {
     "id": "item_123",
@@ -1721,7 +1843,8 @@ const ITEMS_DATA = [
     "price": 205,
     "use": "消耗品",
     "shopUnlock": null,
-    "form": "液体"
+    "form": "液体",
+    "danger": "無害"
   },
   {
     "id": "item_124",
@@ -1735,7 +1858,8 @@ const ITEMS_DATA = [
     "price": 155,
     "use": "消耗品",
     "shopUnlock": null,
-    "form": "液体"
+    "form": "液体",
+    "danger": "無害"
   },
   {
     "id": "item_125",
@@ -1749,7 +1873,8 @@ const ITEMS_DATA = [
     "price": 175,
     "use": "消耗品",
     "shopUnlock": null,
-    "form": "液体"
+    "form": "液体",
+    "danger": "無害"
   },
   {
     "id": "item_126",
@@ -1763,7 +1888,8 @@ const ITEMS_DATA = [
     "price": 175,
     "use": "消耗品",
     "shopUnlock": null,
-    "form": "固形"
+    "form": "固形",
+    "danger": "無害"
   },
   {
     "id": "item_127",
@@ -1777,7 +1903,8 @@ const ITEMS_DATA = [
     "price": 205,
     "use": "消耗品",
     "shopUnlock": null,
-    "form": "液体"
+    "form": "液体",
+    "danger": "要注意"
   },
   {
     "id": "item_128",
@@ -1791,7 +1918,8 @@ const ITEMS_DATA = [
     "price": 115,
     "use": "道具",
     "shopUnlock": null,
-    "form": "固形"
+    "form": "固形",
+    "danger": "無害"
   },
   {
     "id": "item_129",
@@ -1805,7 +1933,8 @@ const ITEMS_DATA = [
     "price": 250,
     "use": "消耗品",
     "shopUnlock": null,
-    "form": "固形"
+    "form": "固形",
+    "danger": "無害"
   },
   {
     "id": "item_130",
@@ -1819,7 +1948,8 @@ const ITEMS_DATA = [
     "price": 75,
     "use": "消耗品",
     "shopUnlock": null,
-    "form": "液体"
+    "form": "液体",
+    "danger": "無害"
   },
   {
     "id": "item_131",
@@ -1833,7 +1963,8 @@ const ITEMS_DATA = [
     "price": 145,
     "use": "道具",
     "shopUnlock": null,
-    "form": "粉末"
+    "form": "粉末",
+    "danger": "無害"
   },
   {
     "id": "item_132",
@@ -1847,7 +1978,8 @@ const ITEMS_DATA = [
     "price": 160,
     "use": "消耗品",
     "shopUnlock": null,
-    "form": "液体"
+    "form": "液体",
+    "danger": "無害"
   },
   {
     "id": "item_133",
@@ -1861,7 +1993,8 @@ const ITEMS_DATA = [
     "price": 265,
     "use": "消耗品",
     "shopUnlock": null,
-    "form": "液体"
+    "form": "液体",
+    "danger": "無害"
   },
   {
     "id": "item_134",
@@ -1875,7 +2008,8 @@ const ITEMS_DATA = [
     "price": 120,
     "use": "消耗品",
     "shopUnlock": null,
-    "form": "固形"
+    "form": "固形",
+    "danger": "無害"
   },
   {
     "id": "item_135",
@@ -1889,7 +2023,8 @@ const ITEMS_DATA = [
     "price": 480,
     "use": "消耗品",
     "shopUnlock": null,
-    "form": "固形"
+    "form": "固形",
+    "danger": "無害"
   },
   {
     "id": "item_136",
@@ -1903,7 +2038,8 @@ const ITEMS_DATA = [
     "price": 300,
     "use": "消耗品",
     "shopUnlock": null,
-    "form": "固形"
+    "form": "固形",
+    "danger": "無害"
   },
   {
     "id": "item_137",
@@ -1917,7 +2053,8 @@ const ITEMS_DATA = [
     "price": 320,
     "use": "消耗品",
     "shopUnlock": null,
-    "form": "固形"
+    "form": "固形",
+    "danger": "要注意"
   },
   {
     "id": "item_138",
@@ -1931,7 +2068,8 @@ const ITEMS_DATA = [
     "price": 265,
     "use": "消耗品",
     "shopUnlock": null,
-    "form": "固形"
+    "form": "固形",
+    "danger": "無害"
   },
   {
     "id": "item_139",
@@ -1945,7 +2083,8 @@ const ITEMS_DATA = [
     "price": 450,
     "use": "道具",
     "shopUnlock": null,
-    "form": "固形"
+    "form": "固形",
+    "danger": "凶器"
   },
   {
     "id": "item_140",
@@ -1959,7 +2098,8 @@ const ITEMS_DATA = [
     "price": 290,
     "use": "消耗品",
     "shopUnlock": null,
-    "form": "固形"
+    "form": "固形",
+    "danger": "無害"
   },
   {
     "id": "item_141",
@@ -1973,7 +2113,8 @@ const ITEMS_DATA = [
     "price": 590,
     "use": "消耗品",
     "shopUnlock": null,
-    "form": "液体"
+    "form": "液体",
+    "danger": "無害"
   },
   {
     "id": "item_142",
@@ -1987,7 +2128,8 @@ const ITEMS_DATA = [
     "price": 480,
     "use": "消耗品",
     "shopUnlock": null,
-    "form": "液体"
+    "form": "液体",
+    "danger": "無害"
   },
   {
     "id": "item_143",
@@ -2001,7 +2143,8 @@ const ITEMS_DATA = [
     "price": 210,
     "use": "消耗品",
     "shopUnlock": null,
-    "form": "固形"
+    "form": "固形",
+    "danger": "無害"
   },
   {
     "id": "item_144",
@@ -2015,7 +2158,8 @@ const ITEMS_DATA = [
     "price": 220,
     "use": "消耗品",
     "shopUnlock": null,
-    "form": "固形"
+    "form": "固形",
+    "danger": "無害"
   },
   {
     "id": "item_145",
@@ -2029,7 +2173,8 @@ const ITEMS_DATA = [
     "price": 875,
     "use": "消耗品",
     "shopUnlock": null,
-    "form": "液体"
+    "form": "液体",
+    "danger": "無害"
   },
   {
     "id": "item_146",
@@ -2043,7 +2188,8 @@ const ITEMS_DATA = [
     "price": 660,
     "use": "販売品",
     "shopUnlock": null,
-    "form": "液体"
+    "form": "液体",
+    "danger": "無害"
   },
   {
     "id": "item_147",
@@ -2057,7 +2203,8 @@ const ITEMS_DATA = [
     "price": 405,
     "use": "販売品",
     "shopUnlock": null,
-    "form": "液体"
+    "form": "液体",
+    "danger": "凶器"
   },
   {
     "id": "item_148",
@@ -2071,7 +2218,8 @@ const ITEMS_DATA = [
     "price": 640,
     "use": "消耗品",
     "shopUnlock": null,
-    "form": "液体"
+    "form": "液体",
+    "danger": "無害"
   },
   {
     "id": "item_149",
@@ -2085,7 +2233,8 @@ const ITEMS_DATA = [
     "price": 815,
     "use": "消耗品",
     "shopUnlock": null,
-    "form": "液体"
+    "form": "液体",
+    "danger": "無害"
   },
   {
     "id": "item_150",
@@ -2099,7 +2248,8 @@ const ITEMS_DATA = [
     "price": 720,
     "use": "道具",
     "shopUnlock": null,
-    "form": "固形"
+    "form": "固形",
+    "danger": "凶器"
   },
   {
     "id": "item_151",
@@ -2113,7 +2263,8 @@ const ITEMS_DATA = [
     "price": 595,
     "use": "消耗品",
     "shopUnlock": null,
-    "form": "固形"
+    "form": "固形",
+    "danger": "無害"
   },
   {
     "id": "item_152",
@@ -2127,7 +2278,8 @@ const ITEMS_DATA = [
     "price": 1020,
     "use": "消耗品",
     "shopUnlock": null,
-    "form": "液体"
+    "form": "液体",
+    "danger": "無害"
   },
   {
     "id": "item_153",
@@ -2141,7 +2293,8 @@ const ITEMS_DATA = [
     "price": 500,
     "use": "消耗品",
     "shopUnlock": null,
-    "form": "固形"
+    "form": "固形",
+    "danger": "無害"
   },
   {
     "id": "item_154",
@@ -2155,7 +2308,8 @@ const ITEMS_DATA = [
     "price": 230,
     "use": "道具",
     "shopUnlock": null,
-    "form": "液体"
+    "form": "液体",
+    "danger": "無害"
   },
   {
     "id": "item_155",
@@ -2169,7 +2323,8 @@ const ITEMS_DATA = [
     "price": 60,
     "use": "道具",
     "shopUnlock": null,
-    "form": "液体"
+    "form": "液体",
+    "danger": "無害"
   },
   {
     "id": "item_156",
@@ -2183,7 +2338,8 @@ const ITEMS_DATA = [
     "price": 120,
     "use": "道具",
     "shopUnlock": null,
-    "form": "液体"
+    "form": "液体",
+    "danger": "無害"
   },
   {
     "id": "item_157",
@@ -2197,7 +2353,8 @@ const ITEMS_DATA = [
     "price": 80,
     "use": "道具",
     "shopUnlock": null,
-    "form": "液体"
+    "form": "液体",
+    "danger": "無害"
   },
   {
     "id": "item_158",
@@ -2211,7 +2368,8 @@ const ITEMS_DATA = [
     "price": 115,
     "use": "道具",
     "shopUnlock": null,
-    "form": "固形"
+    "form": "固形",
+    "danger": "要注意"
   },
   {
     "id": "item_159",
@@ -2225,7 +2383,8 @@ const ITEMS_DATA = [
     "price": 35,
     "use": "道具",
     "shopUnlock": null,
-    "form": "粉末"
+    "form": "粉末",
+    "danger": "要注意"
   },
   {
     "id": "item_160",
@@ -2239,7 +2398,8 @@ const ITEMS_DATA = [
     "price": 105,
     "use": "道具",
     "shopUnlock": null,
-    "form": "液体"
+    "form": "液体",
+    "danger": "無害"
   },
   {
     "id": "item_161",
@@ -2253,7 +2413,8 @@ const ITEMS_DATA = [
     "price": 185,
     "use": "道具",
     "shopUnlock": null,
-    "form": "液体"
+    "form": "液体",
+    "danger": "無害"
   },
   {
     "id": "item_162",
@@ -2267,7 +2428,8 @@ const ITEMS_DATA = [
     "price": 35,
     "use": "道具",
     "shopUnlock": null,
-    "form": "粉末"
+    "form": "粉末",
+    "danger": "無害"
   },
   {
     "id": "item_163",
@@ -2281,7 +2443,8 @@ const ITEMS_DATA = [
     "price": 95,
     "use": "消耗品",
     "shopUnlock": null,
-    "form": "液体"
+    "form": "液体",
+    "danger": "無害"
   },
   {
     "id": "item_164",
@@ -2295,7 +2458,8 @@ const ITEMS_DATA = [
     "price": 230,
     "use": "消耗品",
     "shopUnlock": null,
-    "form": "固形"
+    "form": "固形",
+    "danger": "無害"
   },
   {
     "id": "item_165",
@@ -2309,7 +2473,8 @@ const ITEMS_DATA = [
     "price": 150,
     "use": "消耗品",
     "shopUnlock": null,
-    "form": "液体"
+    "form": "液体",
+    "danger": "無害"
   },
   {
     "id": "item_166",
@@ -2323,7 +2488,8 @@ const ITEMS_DATA = [
     "price": 95,
     "use": "消耗品",
     "shopUnlock": null,
-    "form": "液体"
+    "form": "液体",
+    "danger": "無害"
   },
   {
     "id": "item_167",
@@ -2337,7 +2503,8 @@ const ITEMS_DATA = [
     "price": 205,
     "use": "消耗品",
     "shopUnlock": null,
-    "form": "固形"
+    "form": "固形",
+    "danger": "無害"
   },
   {
     "id": "item_168",
@@ -2351,7 +2518,8 @@ const ITEMS_DATA = [
     "price": 160,
     "use": "消耗品",
     "shopUnlock": null,
-    "form": "液体"
+    "form": "液体",
+    "danger": "無害"
   },
   {
     "id": "item_169",
@@ -2365,7 +2533,8 @@ const ITEMS_DATA = [
     "price": 110,
     "use": "道具",
     "shopUnlock": null,
-    "form": "粉末"
+    "form": "粉末",
+    "danger": "無害"
   },
   {
     "id": "item_170",
@@ -2379,7 +2548,8 @@ const ITEMS_DATA = [
     "price": 45,
     "use": "道具",
     "shopUnlock": null,
-    "form": "固形"
+    "form": "固形",
+    "danger": "無害"
   },
   {
     "id": "item_171",
@@ -2393,7 +2563,8 @@ const ITEMS_DATA = [
     "price": 120,
     "use": "消耗品",
     "shopUnlock": null,
-    "form": "固形"
+    "form": "固形",
+    "danger": "無害"
   },
   {
     "id": "item_172",
@@ -2407,7 +2578,8 @@ const ITEMS_DATA = [
     "price": 85,
     "use": "道具",
     "shopUnlock": null,
-    "form": "液体"
+    "form": "液体",
+    "danger": "無害"
   },
   {
     "id": "item_173",
@@ -2421,7 +2593,8 @@ const ITEMS_DATA = [
     "price": 90,
     "use": "道具",
     "shopUnlock": null,
-    "form": "固形"
+    "form": "固形",
+    "danger": "無害"
   },
   {
     "id": "item_174",
@@ -2435,7 +2608,8 @@ const ITEMS_DATA = [
     "price": 140,
     "use": "道具",
     "shopUnlock": null,
-    "form": "固形"
+    "form": "固形",
+    "danger": "無害"
   },
   {
     "id": "item_175",
@@ -2449,7 +2623,8 @@ const ITEMS_DATA = [
     "price": 25,
     "use": "素材",
     "shopUnlock": 0,
-    "form": "素材"
+    "form": "素材",
+    "danger": "無害"
   },
   {
     "id": "item_176",
@@ -2463,7 +2638,8 @@ const ITEMS_DATA = [
     "price": null,
     "use": "道具",
     "shopUnlock": null,
-    "form": "粉末"
+    "form": "粉末",
+    "danger": "無害"
   },
   {
     "id": "item_177",
@@ -2477,7 +2653,8 @@ const ITEMS_DATA = [
     "price": null,
     "use": "道具",
     "shopUnlock": null,
-    "form": "粉末"
+    "form": "粉末",
+    "danger": "無害"
   },
   {
     "id": "item_178",
@@ -2491,7 +2668,8 @@ const ITEMS_DATA = [
     "price": null,
     "use": "道具",
     "shopUnlock": null,
-    "form": "粉末"
+    "form": "粉末",
+    "danger": "要注意"
   },
   {
     "id": "item_179",
@@ -2505,7 +2683,8 @@ const ITEMS_DATA = [
     "price": null,
     "use": "道具",
     "shopUnlock": null,
-    "form": "固形"
+    "form": "固形",
+    "danger": "無害"
   },
   {
     "id": "item_180",
@@ -2519,7 +2698,8 @@ const ITEMS_DATA = [
     "price": null,
     "use": "素材",
     "shopUnlock": null,
-    "form": "固形"
+    "form": "固形",
+    "danger": "無害"
   },
   {
     "id": "item_181",
@@ -2533,7 +2713,8 @@ const ITEMS_DATA = [
     "price": null,
     "use": "道具",
     "shopUnlock": null,
-    "form": "固形"
+    "form": "固形",
+    "danger": "無害"
   },
   {
     "id": "item_182",
@@ -2547,6 +2728,52 @@ const ITEMS_DATA = [
     "price": null,
     "use": "消耗品",
     "shopUnlock": null,
-    "form": "固形"
+    "form": "固形",
+    "danger": "無害"
+  },
+  {
+    "id": "item_183",
+    "name": "ヨイヤミゴケ",
+    "categoryId": "fungi",
+    "effectId": "mystic",
+    "reactionId": "permeate",
+    "description": "日の落ちる頃だけ、木漏れ日の跡に薄青く浮かび上がる苔。触れると指先が痺れる。",
+    "note": "神秘の素材のうちでは最も見つけやすい。祖母は「宵闇苔」と書いていた。",
+    "source": "採取",
+    "price": 30,
+    "use": "素材",
+    "shopUnlock": null,
+    "form": "素材",
+    "danger": "無害"
+  },
+  {
+    "id": "item_184",
+    "name": "ホシクズソウ",
+    "categoryId": "flora",
+    "effectId": "mystic",
+    "reactionId": "preserve",
+    "description": "高山の草地に混じって生える、白い粒のような花をつける草。夜になると微かに光る。",
+    "note": "星屑草。一株ずつしか生えないが、探せばそこそこ見つかる。",
+    "source": "採取",
+    "price": 30,
+    "use": "素材",
+    "shopUnlock": null,
+    "form": "素材",
+    "danger": "無害"
+  },
+  {
+    "id": "item_185",
+    "name": "ヨナキガイ",
+    "categoryId": null,
+    "effectId": "mystic",
+    "reactionId": "catalyst",
+    "description": "潮だまりに沈む小さな巻貝。耳に当てると、聞いたことのない音がするという。",
+    "note": "夜鳴貝。海辺でしか採れない。祖母はこれを霊銀砂に使っていたらしい。",
+    "source": "採取",
+    "price": 30,
+    "use": "素材",
+    "shopUnlock": null,
+    "form": "素材",
+    "danger": "無害"
   }
 ];
