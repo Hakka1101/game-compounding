@@ -118,6 +118,9 @@ function askNewGame() {
 function startNewGame() {
     clearSave();
     Object.assign(state, freshCraftState(), freshProgress());
+    // 初期値の宣言に無い控えも落としておく
+    state.slipMissingFor = null;
+    state.memo = null;
     startDay(0);
     eventQueue = [];
 
