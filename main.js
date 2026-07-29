@@ -35,18 +35,25 @@ function score(r) {
 }
 
 // ── 状態 ──
-const state = {
-    slots: [],              // [{ item, processId }]
-    vesselId: null,
-    stock: {},              // 所持数
-    vessels: { [VESSEL_GLASS]: START_VESSELS, [VESSEL_PHIAL]: START_VESSELS },
-    unlockedRecipes: [],
-    filter: 'all',
-    query: '',
-    memoItem: null,      // 左に出す素材
-    memoSlip: null,      // 右に出す紙片 "result#no"
-    slipFilter: 'all',
-};
+// 調合まわりの初期値。progress.js の freshProgress() と合わせて一揃い。
+// 最初から始めるときは、この二つを state に流し込み直す。
+function freshCraftState() {
+    return {
+        slots: [],              // [{ item, processId }]
+        vesselId: null,
+        stock: {},              // 所持数
+        vessels: { [VESSEL_GLASS]: START_VESSELS, [VESSEL_PHIAL]: START_VESSELS },
+        unlockedRecipes: [],
+        filter: 'all',
+        query: '',
+        memoItem: null,      // 左に出す素材
+        memoSlip: null,      // 右に出す紙片 "result#no"
+        slipFilter: 'all',
+        slipMissingFor: null,// 紙片の無い調合を右に出しているとき、その名
+    };
+}
+
+const state = freshCraftState();
 
 // 探索を実装したので、素材はすべて有限。
 // 遺物のうち瓶だけは売買が未実装のあいだ仮支給する。
@@ -61,8 +68,11 @@ function held(id) {
 function init() {
     Object.assign(state, freshProgress());
     startDay(0);
+    // 起動時に必ず保存を書くので、続きの有無はここで見ておく
+    const hadSave = hasSave();
     if (!loadGame()) saveGame();
     buildViewTabs();
+    bindOpening();
     document.getElementById('btn-refuse').addEventListener('click', refuseBuyer);
     document.getElementById('btn-event-ok').addEventListener('click', () => nextEvent());
     document.getElementById('btn-ending-ok').addEventListener('click', restartGame);
@@ -85,6 +95,7 @@ function init() {
         });
     });
     renderAll();
+    openTitle(hadSave);
 }
 
 function renderAll() {
@@ -97,6 +108,7 @@ function renderAll() {
     renderSlipMemo();
     renderExplore();
     renderShop();
+    renderDebt();
 }
 
 // ── 調合所と採取を行き来する ──
@@ -147,7 +159,8 @@ function showEnding() {
     document.getElementById('ending-text').textContent = e.text;
     const ul = document.getElementById('ending-notes');
     ul.innerHTML = '';
-    e.notes.forEach(t => {
+    const notes = debtCleared() ? [OPENING_DATA.repaidNote, ...e.notes] : e.notes;
+    notes.forEach(t => {
         const li = document.createElement('li');
         li.textContent = t;
         ul.appendChild(li);
@@ -156,8 +169,7 @@ function showEnding() {
 }
 
 function restartGame() {
-    clearSave();
-    location.reload();
+    startNewGame();
 }
 
 // ── 保存の書き出しと読み込み ──

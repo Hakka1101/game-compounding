@@ -2,7 +2,7 @@
 //  店  ─  売り買いに行動もターンも要らない。ただし外にいる間は使えない
 //   ・村の店は凶器を買い取らない
 //   ・凶器を渡せるのは、日の落ちてから訪ねてくる客だけ
-//   ・液体と気体は瓶ごと売る（瓶は戻らない）
+//   ・液体と気体は瓶ごと売る（瓶は調合時に消えているので、ここでは触らない）
 //  依存: progress.js / main.js
 // ═══════════════════════════════════════════════════════
 
@@ -41,9 +41,8 @@ function doSell(itemId, n) {
     state.soldCount[itemId]  = (state.soldCount[itemId] || 0) + n;
     state.soldIncome[itemId] = (state.soldIncome[itemId] || 0) + gain;
 
-    // 中身を入れた瓶ごと渡すので、瓶は戻らない
-    if (it.form === '液体') state.vessels[VESSEL_PHIAL] = Math.max(0, state.vessels[VESSEL_PHIAL] - n);
-    if (it.form === '気体') state.vessels[VESSEL_GLASS] = Math.max(0, state.vessels[VESSEL_GLASS] - n);
+    // 瓶は調合した時点で state.vessels から抜けている（中身に化けている）。
+    // 売っても戻らない、というのはそれで足りる。ここで減らすと二重取りになる。
 
     saveGame();
     renderAll();
@@ -90,8 +89,7 @@ function doSellWeapon(itemId) {
     state.totalEarned += gain;
     state.soldCount[itemId]  = (state.soldCount[itemId] || 0) + 1;
     state.soldIncome[itemId] = (state.soldIncome[itemId] || 0) + gain;
-    if (it.form === '液体') state.vessels[VESSEL_PHIAL] = Math.max(0, state.vessels[VESSEL_PHIAL] - 1);
-    if (it.form === '気体') state.vessels[VESSEL_GLASS] = Math.max(0, state.vessels[VESSEL_GLASS] - 1);
+    // 瓶は調合時に消費済み。ここでは減らさない（doSell と同じ）
 
     state.pendingBuyer = false;
     saveGame();

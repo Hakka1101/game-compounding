@@ -28,6 +28,7 @@
       </div>
       <div class="day-right">
         <span class="day-money">所持金 <b id="money">0</b></span>
+        <span class="day-debt">借財 <b id="debt">0</b></span>
         <span class="day-turns" id="day-turns"></span>
         <button class="btn-rest" id="btn-rest">休む（日を送る）</button>
         <button class="btn-next-day hidden" id="btn-next-day">翌日へ</button>
@@ -211,6 +212,33 @@
       </div>
     </section>
 
+    <!-- ── 表題 ── -->
+    <div class="overlay hidden" id="title-overlay">
+      <div class="overlay-box title-box">
+        <p class="title-seal">調</p>
+        <h2 class="title-name">調合所</h2>
+        <p class="title-sub">草木と鉱物の覚え書き</p>
+        <p class="title-note" id="title-note"></p>
+        <div class="title-btns">
+          <button class="btn-compound" id="btn-title-continue">続きから</button>
+          <button class="btn-compound" id="btn-title-new">始める</button>
+        </div>
+      </div>
+    </div>
+
+    <!-- ── 開幕 ── -->
+    <div class="overlay hidden" id="opening-overlay">
+      <div class="overlay-box opening-box">
+        <h2 class="overlay-title" id="opening-title"></h2>
+        <p class="overlay-text" id="opening-text"></p>
+        <div class="opening-foot">
+          <span class="opening-page" id="opening-page"></span>
+          <button class="btn-reset" id="btn-opening-skip">読み飛ばす</button>
+          <button class="btn-compound" id="btn-opening-next">次へ</button>
+        </div>
+      </div>
+    </div>
+
     <!-- ── 朝の出来事 ── -->
     <div class="overlay hidden" id="event-overlay">
       <div class="overlay-box">
@@ -256,6 +284,7 @@
   <script src="data_events.js"></script>
   <script src="data_endings.js"></script>
   <script src="progress.js"></script>
+  <script src="opening.js"></script>
   <script src="shop.js"></script>
   <script src="main.js"></script>
 
@@ -280,6 +309,7 @@
       ['EVENTS_DATA',     'data_events.js'],
       ['ENDINGS_DATA',    'data_endings.js'],
       ['flagMet',         'progress.js'],
+      ['OPENING_DATA',    'opening.js'],
       ['renderShop',      'shop.js'],
       ['checkRecipe',     'main.js']
     ];

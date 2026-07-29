@@ -904,3 +904,76 @@ button, input { font-family: var(--font); color: inherit; }
   border-left: 1px solid var(--rule);
   margin-bottom: 6px;
 }
+
+
+/* ════════════════════════════════════════════════════════
+   表題と開幕
+   ════════════════════════════════════════════════════════ */
+
+.day-debt { font-size: 12px; color: var(--ink-thin); }
+.day-debt b { font-weight: 600; }
+.day-debt.debt-short b { color: var(--seal); }
+
+.title-box { max-width: 460px; text-align: center; padding: 40px 34px 34px; }
+
+/* 朱印。表題の上に一つだけ置く */
+.title-seal {
+  display: inline-block;
+  width: 34px;
+  height: 34px;
+  line-height: 32px;
+  border: 1px solid var(--seal);
+  color: var(--seal);
+  font-size: 15px;
+  margin-bottom: 22px;
+}
+
+.title-name {
+  font-size: 30px;
+  font-weight: 600;
+  letter-spacing: 0.5em;
+  padding-left: 0.5em;
+}
+
+.title-sub {
+  font-size: 12px;
+  color: var(--ink-thin);
+  letter-spacing: 0.2em;
+  margin-top: 8px;
+}
+
+.title-note {
+  font-size: 12px;
+  color: var(--ink-thin);
+  line-height: 2.1;
+  margin: 26px auto 0;
+  padding-top: 18px;
+  border-top: 1px solid var(--rule-faint);
+  max-width: 22em;
+}
+
+.title-btns {
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  gap: 14px;
+  margin-top: 24px;
+}
+
+.opening-box { max-width: 560px; }
+.opening-box .overlay-text { margin-bottom: 22px; }
+
+.opening-foot {
+  display: flex;
+  align-items: center;
+  gap: 10px;
+  padding-top: 14px;
+  border-top: 1px solid var(--rule-faint);
+}
+
+.opening-page {
+  font-size: 11px;
+  color: var(--ink-faint);
+  letter-spacing: 0.2em;
+  margin-right: auto;
+}

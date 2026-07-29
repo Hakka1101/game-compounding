@@ -1,5 +1,5 @@
 // 採取表（地形×時間帯）
-// tools/convert.py により game_data_v25.xlsx から自動生成。直接編集しないこと。
+// tools/convert.py により game_data_v26.xlsx から自動生成。直接編集しないこと。
 const SPAWNS_DATA = [
   {
     "itemId": "item_001",
@@ -4167,5 +4167,113 @@ const SPAWNS_DATA = [
     "quantity": 1,
     "condition": null,
     "note": "漂着物の下に"
+  },
+  {
+    "itemId": "item_186",
+    "terrainId": "ter_shallow",
+    "timeSlot": "dawn",
+    "rate": 0.32,
+    "quantity": 1,
+    "condition": null,
+    "note": "瀬の流れから汲む"
+  },
+  {
+    "itemId": "item_186",
+    "terrainId": "ter_shallow",
+    "timeSlot": "morning",
+    "rate": 0.4,
+    "quantity": 1,
+    "condition": null,
+    "note": "瀬の流れから汲む"
+  },
+  {
+    "itemId": "item_186",
+    "terrainId": "ter_shallow",
+    "timeSlot": "noon",
+    "rate": 0.45,
+    "quantity": 1,
+    "condition": null,
+    "note": "瀬の流れから汲む"
+  },
+  {
+    "itemId": "item_186",
+    "terrainId": "ter_shallow",
+    "timeSlot": "afternoon",
+    "rate": 0.4,
+    "quantity": 1,
+    "condition": null,
+    "note": "瀬の流れから汲む"
+  },
+  {
+    "itemId": "item_186",
+    "terrainId": "ter_shallow",
+    "timeSlot": "night",
+    "rate": 0.3,
+    "quantity": 1,
+    "condition": null,
+    "note": "瀬の流れから汲む"
+  },
+  {
+    "itemId": "item_187",
+    "terrainId": "ter_reed",
+    "timeSlot": "morning",
+    "rate": 0.38,
+    "quantity": 1,
+    "condition": null,
+    "note": "水草を束ねて絞る"
+  },
+  {
+    "itemId": "item_187",
+    "terrainId": "ter_reed",
+    "timeSlot": "noon",
+    "rate": 0.42,
+    "quantity": 1,
+    "condition": null,
+    "note": "水草を束ねて絞る"
+  },
+  {
+    "itemId": "item_187",
+    "terrainId": "ter_reed",
+    "timeSlot": "afternoon",
+    "rate": 0.38,
+    "quantity": 1,
+    "condition": null,
+    "note": "水草を束ねて絞る"
+  },
+  {
+    "itemId": "item_188",
+    "terrainId": "ter_gravel",
+    "timeSlot": "dawn",
+    "rate": 0.35,
+    "quantity": 1,
+    "condition": null,
+    "note": "石を掘ると滲む"
+  },
+  {
+    "itemId": "item_188",
+    "terrainId": "ter_gravel",
+    "timeSlot": "morning",
+    "rate": 0.4,
+    "quantity": 1,
+    "condition": null,
+    "note": "石を掘ると滲む"
+  },
+  {
+    "itemId": "item_188",
+    "terrainId": "ter_gravel",
+    "timeSlot": "afternoon",
+    "rate": 0.35,
+    "quantity": 1,
+    "condition": null,
+    "note": "石を掘ると滲む"
+  },
+  {
+    "itemId": "item_188",
+    "terrainId": "ter_gravel",
+    "timeSlot": "night",
+    "rate": 0.3,
+    "quantity": 1,
+    "condition": null,
+    "note": "石を掘ると滲む"
   }
 ];

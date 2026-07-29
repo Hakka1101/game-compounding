@@ -1,5 +1,5 @@
 // レシピ定義
-// tools/convert.py により game_data_v25.xlsx から自動生成。直接編集しないこと。
+// tools/convert.py により game_data_v26.xlsx から自動生成。直接編集しないこと。
 const RECIPES_DATA = [
   {
     "result": "加速の秘薬",
@@ -13,11 +13,11 @@ const RECIPES_DATA = [
         "note": "ニガハシリダケ限定"
       },
       {
-        "checkType": "categoryId",
-        "value": "liquid",
+        "checkType": "itemId",
+        "value": "item_059",
         "processId": "boil",
         "quantity": 1,
-        "note": "水系ならなんでもOK"
+        "note": "蒸留水を煮て溶かす"
       }
     ]
   },
@@ -188,11 +188,11 @@ const RECIPES_DATA = [
         "note": "植物かつ治癒の素材（イバラアザミ・ハッカガヤ・ニガヨモギモドキなど）"
       },
       {
-        "checkType": "categoryId",
-        "value": "liquid",
+        "checkType": "itemId",
+        "value": "item_059",
         "processId": "raw",
         "quantity": 1,
-        "note": "水でのばす"
+        "note": "蒸留水でのばす"
       }
     ]
   },
@@ -215,11 +215,11 @@ const RECIPES_DATA = [
         "note": "凝固素材で丸薬に固める"
       },
       {
-        "checkType": "categoryId",
-        "value": "liquid",
+        "checkType": "itemId",
+        "value": "item_059",
         "processId": "raw",
         "quantity": 1,
-        "note": "溶媒"
+        "note": "蒸留水を溶媒に"
       }
     ]
   },
@@ -1131,11 +1131,11 @@ const RECIPES_DATA = [
         "note": "熱を奪う"
       },
       {
-        "checkType": "categoryId",
-        "value": "liquid",
+        "checkType": "itemId",
+        "value": "item_059",
         "processId": "raw",
         "quantity": 1,
-        "note": "水でのばす"
+        "note": "蒸留水でのばす"
       }
     ]
   },
@@ -2452,11 +2452,11 @@ const RECIPES_DATA = [
         "note": "【中級】"
       },
       {
-        "checkType": "categoryId",
-        "value": "liquid",
-        "processId": "distill",
+        "checkType": "itemId",
+        "value": "item_059",
+        "processId": "raw",
         "quantity": 1,
-        "note": "不純物のない水で薄める"
+        "note": "蒸留水で薄める"
       }
     ]
   },

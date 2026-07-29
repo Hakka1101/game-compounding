@@ -26,9 +26,8 @@ w.addEventListener('load', () => setTimeout(() => {
   ['草木の朝露','イバラアザミ'].forEach(n => S.stock[byName.get(n).id] = 20);
   
   const liq = byName.get('草木の朝露');
-  const r = ev('checkRecipe')([{ item: liq, processId: 'distill' }], 'item_175');
+  const r = ev('checkRecipe')([{ item: liq, processId: 'distill' }]);
   S.slots = [{ item: liq, processId: 'distill' }];
-  S.vesselId = 'item_175';
   click(d.getElementById('btn-compound'));
   console.log('  蒸留水を作った: ' + (S.unlockedRecipes.includes('蒸留水') ? 'はい ✓' : 'いいえ'));
   console.log('  craftCount: ' + JSON.stringify(S.craftCount) + ' / 初回日 ' + JSON.stringify(S.firstCraftDay));

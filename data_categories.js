@@ -37,7 +37,7 @@ const dataCategories = [
     id: "relics",
     name: "遺物",
     icon: "🏺",
-    description: "釘やコイン、ガラス瓶などの人工物。ガラス瓶は液体や気体の保存に使用する。"
+    description: "釘やコイン、空き瓶などの人工物。薬瓶と気体瓶は調合品の保存に使用する。"
   },
   {
     id: "processed",

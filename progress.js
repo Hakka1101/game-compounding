@@ -19,6 +19,7 @@ const productOf = name => itemByName.get(name);
 function freshProgress() {
     return {
         money: START_MONEY,
+        debt: OPENING_DATA.debt,   // 祖母の療養に要った額。期日に一括で判定する
         totalEarned: 0,
         soldCount: {},      // itemId → 個数
         soldIncome: {},     // itemId → 金額
@@ -173,6 +174,8 @@ function refreshMerchant() {
 //  結末
 // ═══════════════════════════════════════════════════════
 function judgeEnding() {
+    // 期日に借財を返せなければ、ほかに何をしていても店は人手に渡る
+    if (!debtCleared()) return buildEnding(OPENING_DATA.foreclosure);
     const list = [...ENDINGS_DATA.endings].sort((a, b) => a.priority - b.priority);
     for (const e of list) {
         if (e.forbid && evalCondition(e.forbid)) continue;
@@ -200,7 +203,7 @@ function buildEnding(e) {
 //  保存  ─ localStorage を主、書き出し文字列を控えに
 //  マスを調べるたびに保存するので、巻き戻しても引き直せない
 // ═══════════════════════════════════════════════════════
-const SAVE_FIELDS = ['money','totalEarned','soldCount','soldIncome','craftCount','firstCraftDay',
+const SAVE_FIELDS = ['money','debt','totalEarned','soldCount','soldIncome','craftCount','firstCraftDay',
                      'everHeld','exploredDays','restedDays','firedEvents','lastEventDay',
                      'unlockedBundles','boughtSlips','pendingBuyer','merchantStock','ended',
                      'stock','vessels','unlockedRecipes'];

@@ -1,5 +1,5 @@
 // アイテム定義
-// tools/convert.py により game_data_v25.xlsx から自動生成。直接編集しないこと。
+// tools/convert.py により game_data_v26.xlsx から自動生成。直接編集しないこと。
 const ITEMS_DATA = [
   {
     "id": "item_001",
@@ -1308,12 +1308,12 @@ const ITEMS_DATA = [
   },
   {
     "id": "item_088",
-    "name": "ガラス瓶",
+    "name": "気体瓶",
     "categoryId": "relics",
     "effectId": "none",
     "reactionId": "preserve",
-    "description": "気体や液体を封じるための小瓶。行商人が束で売っている。",
-    "note": "購入品。気体を作る調合には必ずこれが要る。瓶がなければ、生じた気体はその場で散ってしまう。",
+    "description": "気体を封じるための口の狭い瓶。行商人が束で売っている。",
+    "note": "購入品。気体の調合品を作るときに自動で使われる。瓶がなければ、生じた気体はその場で散ってしまう。中身を材料として使えば、瓶は棚に戻る。",
     "source": "購入",
     "price": 30,
     "use": "素材",
@@ -2618,7 +2618,7 @@ const ITEMS_DATA = [
     "effectId": "none",
     "reactionId": "preserve",
     "description": "液体を入れるための小瓶。栓と匙が付いている。",
-    "note": "購入品。液体の調合品を作るには必ずこれが要る。中身を使い切れば瓶は戻る。",
+    "note": "購入品。液体の調合品を作るときに自動で使われる。瓶がなければ、できた薬は流れて消えてしまう。中身を材料として使えば、瓶は棚に戻る。",
     "source": "購入",
     "price": 25,
     "use": "素材",
@@ -2764,7 +2764,7 @@ const ITEMS_DATA = [
   {
     "id": "item_185",
     "name": "ヨナキガイ",
-    "categoryId": null,
+    "categoryId": "creature",
     "effectId": "mystic",
     "reactionId": "catalyst",
     "description": "潮だまりに沈む小さな巻貝。耳に当てると、聞いたことのない音がするという。",
@@ -2773,6 +2773,51 @@ const ITEMS_DATA = [
     "price": 30,
     "use": "素材",
     "shopUnlock": null,
+    "form": "素材",
+    "danger": "無害"
+  },
+  {
+    "id": "item_186",
+    "name": "瀬の走り水",
+    "categoryId": "liquid",
+    "effectId": "none",
+    "reactionId": "neutralize",
+    "description": "膝までの浅い流れから汲んだ水。絶えず洗われ続けているため、癖というものを持たない。",
+    "note": "岸に寄った浅瀬では、水が石の上をたえず滑っていて澱むということがない。汲めばどこまでも澄んでいて、舌に何も残さない。癖の強い素材どうしがぶつかり合うとき、この水を差せばどちらの角も削れて「中和」する。手に入りやすく、失敗しにくい。最初に覚える水はこれでいい。",
+    "source": "採取",
+    "price": 8,
+    "use": "素材",
+    "shopUnlock": 200,
+    "form": "素材",
+    "danger": "無害"
+  },
+  {
+    "id": "item_187",
+    "name": "水草の絞り水",
+    "categoryId": "liquid",
+    "effectId": "none",
+    "reactionId": "permeate",
+    "description": "水面を覆う草を束ねて絞った、青くさい水。薬効を素材の芯まで運ぶ。",
+    "note": "根の絡み合った水草を引き上げ、力任せに絞ると、青くさい匂いの水が滴る。草の細い管を通ってきたこの水は、同じように素材の隙間へ入り込んでいく「浸透」の力を持つ。清らかとは言えないが、奥まで届く。",
+    "source": "採取",
+    "price": 8,
+    "use": "素材",
+    "shopUnlock": 200,
+    "form": "素材",
+    "danger": "無害"
+  },
+  {
+    "id": "item_188",
+    "name": "川原の伏流水",
+    "categoryId": "liquid",
+    "effectId": "none",
+    "reactionId": "separate",
+    "description": "河原の石を掘ると滲み出す水。砂利を潜るあいだに濁りが置き去りにされている。",
+    "note": "水に洗われた石の下には、川とは別の流れが隠れている。掘れば足跡ほどの窪みに水が滲み、しばらく待てば澄んでくる。砂利の層を潜り抜けるあいだに重いものが振り落とされるので、この水は薬液の中でも同じように成分を選り分ける「分離」として働く。",
+    "source": "採取",
+    "price": 8,
+    "use": "素材",
+    "shopUnlock": 200,
     "form": "素材",
     "danger": "無害"
   }
