@@ -70,18 +70,13 @@
 
         <div class="vessel-area">
           <div class="vessel-row">
-            <span class="vessel-label">器</span>
-            <div class="vessel-btns" role="group" aria-label="器を選ぶ">
-              <button class="vessel-btn active" data-vessel="">使わない</button>
-              <button class="vessel-btn" data-vessel="item_175">
-                薬瓶<span class="vessel-count">0</span>
-              </button>
-              <button class="vessel-btn" data-vessel="item_088">
-                ガラス瓶<span class="vessel-count">0</span>
-              </button>
+            <span class="vessel-label">棚の瓶</span>
+            <div class="vessel-stats">
+              <span class="vessel-stat" data-vessel="item_175">薬瓶<span class="vessel-count">0</span></span>
+              <span class="vessel-stat" data-vessel="item_088">気体瓶<span class="vessel-count">0</span></span>
             </div>
           </div>
-          <p class="vessel-hint">液体は薬瓶に、気体はガラス瓶に納めなければ形を保てない。</p>
+          <p class="vessel-hint">液体は薬瓶に、気体は気体瓶に、調合のときひとりでに納まる。中身を材料に使えば、瓶は棚に戻る。</p>
         </div>
 
         <div class="compound-area">
@@ -91,7 +86,7 @@
 
         <div class="result-panel" id="result-display">
           <div class="result-state" id="state-waiting">
-            <p class="result-sub-text">素材と工程、そして器を選び、調合を試みる。</p>
+            <p class="result-sub-text">素材と工程を選び、調合を試みる。</p>
           </div>
           <div class="result-state hidden" id="state-success">
             <p class="result-badge">できあがった</p>
@@ -260,9 +255,9 @@
     </div>
 
     <footer class="game-footer">
-      <span><span class="footer-key">素材</span>押して出し入れ</span>
+      <span><span class="footer-key">素材</span>押して出し入れ／端の「読」で読むだけ</span>
       <span><span class="footer-key">工程</span>素材ごとに決める</span>
-      <span><span class="footer-key">器</span>剤形に合わせる</span>
+      <span><span class="footer-key">瓶</span>剤形に合わせて自動で使う</span>
       <span><span class="footer-key">覚え書き</span>素材や調合を押すと出る</span>
       <span><button class="footer-btn" id="btn-save-menu">保存</button></span>
     </footer>
@@ -287,6 +282,10 @@
   <script src="opening.js"></script>
   <script src="shop.js"></script>
   <script src="main.js"></script>
+
+  <!-- デバッグモード。開発用なので必須ファイル検査には入れない。
+       消すときはこの行とファイルを削除するだけでよい。 -->
+  <script src="debug.js"></script>
 
   <!-- 起動できたか確かめる。ファイルが一つでも欠けると全ての操作が死ぬので、
        黙って止まらずに何が足りないかを画面に出す。

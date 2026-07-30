@@ -1,21 +1,39 @@
 /* ════════════════════════════════════════════════════════
    調合所  ─  祖母の店を継いだ者の覚え書き
    書体: しっぽり明朝／紙地に墨、差し色は朱印のみ
+
+   紙は三層。地 → 貼り込んだ紙片 → 作業面。
+   区画ごとに層を変えることで、どこに何があるかを地の色で示す。
+   墨は四段。ink / ink-thin / ink-faint までが文字。
+   ink-ghost は飾りと不活性のみで、文字には使わない。
    ════════════════════════════════════════════════════════ */
 
 :root {
-  --paper:      #F2EBDC;   /* 生成りの紙 */
-  --paper-deep: #EDE4D0;   /* 貼り込んだ紙片 */
-  --paper-warm: #E6DCC6;   /* 選択中 */
-  --rule:       #C9BCA1;   /* 罫 */
-  --rule-faint: #DCD0B6;   /* 淡い罫 */
-  --ink:        #35302A;   /* 墨 */
-  --ink-thin:   #6E655A;   /* 淡墨 */
-  --ink-faint:  #9A9081;   /* さらに淡く */
-  --sage:       #6E7F4E;   /* 草 */
-  --seal:       #A8503C;   /* 朱 */
+  /* ── 紙 ── */
+  --paper-lift: #F8F3E6;   /* 作業面・伏せた紙片。いちばん明るい */
+  --paper:      #F2EBDC;   /* 生成りの地 */
+  --paper-deep: #E9DFC9;   /* 貼り込んだ紙片・帯 */
+  --paper-warm: #DFD3B8;   /* 選択中 */
+
+  /* ── 罫。三段 ── */
+  --rule-strong: #9C8B6C;  /* 区画の縁 */
+  --rule:        #BCAB8B;  /* 通常の罫 */
+  --rule-faint:  #D3C6A9;  /* 淡い罫 */
+
+  /* ── 墨。文字は ink-faint までに留める ── */
+  --ink:       #2A251E;
+  --ink-thin:  #564E42;
+  --ink-faint: #736A5C;
+  --ink-ghost: #9C9384;    /* 飾りと不活性のみ */
+
+  --sage:      #5C6E3C;    /* 草 */
+  --seal:      #9E4230;    /* 朱 */
+  --seal-soft: rgba(158, 66, 48, .10);
 
   --font: 'Shippori Mincho', 'Yu Mincho', 'Hiragino Mincho ProN', 'MS Mincho', serif;
+
+  /* 押した木版のような影。ボタンの手触りをこれ一つで揃える */
+  --press: 2px 2px 0 var(--rule-faint);
 }
 
 *, *::before, *::after { box-sizing: border-box; margin: 0; padding: 0; }
@@ -26,17 +44,24 @@ body {
   font-family: var(--font);
   font-size: 14px;
   line-height: 1.9;
+  letter-spacing: .02em;   /* 明朝の細い画を小さい字でも拾えるように */
   min-height: 100vh;
   -webkit-font-smoothing: antialiased;
 }
 
-button, input { font-family: var(--font); color: inherit; }
+button, input { font-family: var(--font); color: inherit; letter-spacing: inherit; }
 
-:focus-visible { outline: 1px solid var(--sage); outline-offset: 2px; }
+:focus-visible { outline: 2px solid var(--sage); outline-offset: 2px; }
+
+/* 数字は桁を揃える */
+.item-count, .vessel-count, .trade-price, .trade-have,
+.day-money b, .day-debt b, .slot-num, .rb-count, .day-turns {
+  font-variant-numeric: tabular-nums;
+}
 
 /* ════════ 全体 ════════ */
 .game-container {
-  max-width: 1180px;
+  max-width: 1240px;
   margin: 0 auto;
   padding: 20px 22px 28px;
   display: flex;
@@ -48,7 +73,7 @@ button, input { font-family: var(--font); color: inherit; }
 .game-header {
   text-align: center;
   padding-bottom: 14px;
-  border-bottom: 1px solid var(--rule);
+  border-bottom: 1px solid var(--rule-strong);
 }
 
 .game-title {
@@ -59,50 +84,123 @@ button, input { font-family: var(--font); color: inherit; }
 }
 
 .game-subtitle {
-  font-size: 11px;
+  font-size: 12px;
   color: var(--ink-thin);
   letter-spacing: 0.25em;
   margin-top: 4px;
 }
 
-/* ════════ 三段組 ════════ */
+/* ════════ 三段組 ════════
+   左＝棚（地のまま）／中央＝作業面（明るく、二重罫）／右＝貼り込んだ紙片（深く）  */
 .game-main {
   display: grid;
-  grid-template-columns: 236px minmax(0, 1fr) 316px;
-  gap: 22px;
+  grid-template-columns: 252px minmax(0, 1fr) 330px;
+  gap: 20px;
   align-items: start;
 }
 
+#panel-items,
+#panel-workspace,
+#panel-notes {
+  padding: 14px 13px 16px;
+  border: 1px solid var(--rule);
+}
+
+#panel-items {
+  background: var(--paper);
+  border-color: var(--rule-faint);
+}
+
+/* 中央だけ二重罫にして、ここが手を動かす場だと分かるようにする */
+#panel-workspace {
+  background: var(--paper-lift);
+  border-color: var(--rule-strong);
+  box-shadow: inset 0 0 0 1px var(--paper-lift),
+              inset 0 0 0 2px var(--rule-faint);
+  padding: 16px 18px 18px;
+}
+
+#panel-notes {
+  background: var(--paper-deep);
+  border-color: var(--rule);
+}
+
+/* ── 見出し。左に印を置き、区画ごとに色を変える ── */
 .column-title {
-  font-size: 12px;
-  color: var(--ink-thin);
+  position: relative;
+  font-size: 13px;
+  font-weight: 600;
+  color: var(--ink);
   letter-spacing: 0.2em;
   border-bottom: 1px solid var(--rule);
-  padding-bottom: 5px;
-  margin-bottom: 10px;
+  padding: 0 0 5px 11px;
+  margin-bottom: 11px;
+}
+.column-title::before {
+  content: '';
+  position: absolute;
+  left: 0;
+  top: .42em;
+  width: 3px;
+  height: 1em;
+  background: var(--ink-faint);
+}
+
+#panel-items    > .column-title::before { background: var(--sage); }
+#panel-workspace  .column-title::before { background: var(--ink); }
+#panel-notes      .column-title::before { background: var(--seal); }
+
+/* 中央の見出しはひと回り大きく */
+#panel-workspace > .column-title { font-size: 14px; }
+
+/* 区画のなかの小見出しは点線にして格を下げる */
+.side-section .column-title {
+  font-size: 12px;
+  font-weight: 400;
+  color: var(--ink-thin);
+  border-bottom-style: dotted;
 }
 
 .column-note {
-  font-size: 10px;
+  font-size: 11px;
   color: var(--ink-faint);
   text-align: right;
   margin-top: 8px;
 }
+
+/* ── 綴じてスクロールさせるものは、枠と明るい地で「窓」に見せる ── */
+.item-list, .slip-index, .rb-body, .trade-list, .explore-log {
+  background: var(--paper-lift);
+  border: 1px solid var(--rule-faint);
+  scrollbar-width: thin;
+  scrollbar-color: var(--rule-strong) transparent;
+}
+.item-list::-webkit-scrollbar,
+.slip-index::-webkit-scrollbar,
+.rb-body::-webkit-scrollbar,
+.trade-list::-webkit-scrollbar,
+.explore-log::-webkit-scrollbar { width: 6px; }
+
+.item-list::-webkit-scrollbar-thumb,
+.slip-index::-webkit-scrollbar-thumb,
+.rb-body::-webkit-scrollbar-thumb,
+.trade-list::-webkit-scrollbar-thumb,
+.explore-log::-webkit-scrollbar-thumb { background: var(--rule-strong); }
 
 /* ════════ 左：素材 ════════ */
 .item-tools { margin-bottom: 10px; }
 
 .item-search {
   width: 100%;
-  background: transparent;
-  border: none;
-  border-bottom: 1px solid var(--rule);
-  font-size: 12px;
-  padding: 4px 2px;
-  margin-bottom: 8px;
+  background: var(--paper-lift);
+  border: 1px solid var(--rule-faint);
+  border-bottom-color: var(--rule);
+  font-size: 13px;
+  padding: 5px 8px;
+  margin-bottom: 9px;
 }
 .item-search::placeholder { color: var(--ink-faint); }
-.item-search:focus { outline: none; border-bottom-color: var(--sage); }
+.item-search:focus { outline: none; border-color: var(--sage); }
 
 .filter-btns { display: flex; flex-wrap: wrap; gap: 4px 6px; }
 
@@ -110,36 +208,32 @@ button, input { font-family: var(--font); color: inherit; }
   background: none;
   border: none;
   border-bottom: 1px solid transparent;
-  color: var(--ink-faint);
-  font-size: 11px;
-  padding: 1px 2px;
+  color: var(--ink-thin);
+  font-size: 12px;
+  padding: 1px 3px;
   cursor: pointer;
   transition: color .12s, border-color .12s;
 }
-.filter-btn:hover { color: var(--ink); }
-.filter-btn.active { color: var(--sage); border-bottom-color: var(--sage); }
+.filter-btn:hover { color: var(--ink); border-bottom-color: var(--rule); }
+.filter-btn.active { color: var(--sage); font-weight: 600; border-bottom-color: var(--sage); }
 
-/* 一覧はここで綴じてスクロールさせる */
 .item-list {
   list-style: none;
   max-height: 40vh;
   overflow-y: auto;
-  scrollbar-width: thin;
-  scrollbar-color: var(--rule) transparent;
 }
-.item-list::-webkit-scrollbar { width: 5px; }
-.item-list::-webkit-scrollbar-thumb { background: var(--rule); }
 
 .item-entry {
   display: flex;
   align-items: center;
   gap: 8px;
-  padding: 6px 8px;
+  padding: 6px 8px 6px 6px;
   border-bottom: 1px dotted var(--rule);
-  border-left: 2px solid transparent;
+  border-left: 3px solid transparent;
   cursor: pointer;
   transition: background .1s;
 }
+.item-entry:last-child { border-bottom: none; }
 .item-entry:hover { background: var(--paper-deep); }
 
 .item-entry.selected {
@@ -147,7 +241,7 @@ button, input { font-family: var(--font); color: inherit; }
   border-left-color: var(--sage);
 }
 
-.item-cat-icon { font-size: 14px; flex-shrink: 0; line-height: 1; opacity: .85; }
+.item-cat-icon { font-size: 14px; flex-shrink: 0; line-height: 1; }
 
 .item-name {
   flex: 1;
@@ -157,12 +251,61 @@ button, input { font-family: var(--font); color: inherit; }
   text-overflow: ellipsis;
 }
 
-.item-count { font-size: 11px; color: var(--ink-thin); flex-shrink: 0; }
-.item-entry.selected .item-count { color: var(--sage); }
+.item-count { font-size: 12px; color: var(--ink-thin); flex-shrink: 0; }
+.item-entry.selected .item-name { font-weight: 600; }
+.item-entry.selected .item-count { color: var(--sage); font-weight: 600; }
+
+/* ── 読むだけの口 ──
+   名前の表示幅を削らないよう、行に触れたときだけ右端に出す。
+   出ている間は所持数と入れ替わる（同じ場所を使う）。         */
+.item-entry { position: relative; }
+
+.item-read-btn {
+  position: absolute;
+  right: 6px;
+  top: 50%;
+  transform: translateY(-50%);
+  background: var(--paper-lift);
+  border: 1px solid var(--rule);
+  color: var(--ink-thin);
+  font-family: var(--font);
+  font-size: 11px;
+  line-height: 1.6;
+  padding: 0 6px;
+  cursor: pointer;
+  opacity: 0;
+  pointer-events: none;
+  transition: opacity .1s, background .1s, border-color .1s, color .1s;
+}
+.item-entry:hover .item-read-btn,
+.item-entry:focus-within .item-read-btn,
+.item-entry.reading .item-read-btn { opacity: 1; pointer-events: auto; }
+
+.item-entry:hover .item-count,
+.item-entry:focus-within .item-count,
+.item-entry.reading .item-count { visibility: hidden; }
+
+.item-read-btn:hover { background: var(--paper-warm); border-color: var(--ink-thin); color: var(--ink); }
+
+/* いま読んでいる行 */
+.item-entry.reading .item-read-btn { border-color: var(--sage); color: var(--sage); }
+.item-entry.reading .item-name { color: var(--ink); }
+
+/* 触れて確かめられない環境では出したままにする */
+@media (hover: none) {
+  .item-read-btn {
+    position: static;
+    transform: none;
+    opacity: 1;
+    pointer-events: auto;
+    flex-shrink: 0;
+  }
+  .item-entry .item-count { visibility: visible; }
+}
 
 .item-empty {
   list-style: none;
-  font-size: 11px;
+  font-size: 12px;
   color: var(--ink-faint);
   text-align: center;
   padding: 24px 0;
@@ -171,35 +314,52 @@ button, input { font-family: var(--font); color: inherit; }
 /* ════════ 中央：調合台 ════════ */
 .ingredient-slots { display: flex; flex-direction: column; gap: 8px; margin-bottom: 16px; }
 
-.ingredient-slot { padding: 9px 12px; border: 1px solid var(--rule-faint); }
-.ingredient-slot.filled { border-color: var(--rule); background: var(--paper-deep); }
-.ingredient-slot.empty  { border-style: dashed; }
+.ingredient-slot {
+  padding: 9px 12px;
+  border: 1px solid var(--rule-faint);
+  border-left: 3px solid var(--rule-faint);
+  background: transparent;
+}
+.ingredient-slot.empty { border-style: dashed; }
 
-.ingredient-slot.slot-error { border-color: var(--seal); border-style: solid; }
+/* 入っている枠は地を沈めて左を締める。空との差をはっきりさせる */
+.ingredient-slot.filled {
+  border-style: solid;
+  border-color: var(--rule);
+  border-left-color: var(--ink-thin);
+  background: var(--paper-deep);
+}
+
+.ingredient-slot.slot-error {
+  border-style: solid;
+  border-color: var(--seal);
+  border-left-color: var(--seal);
+  background: var(--seal-soft);
+}
 .ingredient-slot.slot-error .process-label { color: var(--seal); }
 
 .slot-header-row { display: flex; align-items: center; gap: 8px; }
 .ingredient-slot.filled .slot-header-row { margin-bottom: 6px; }
 
-.slot-num { color: var(--ink-thin); font-size: 13px; flex-shrink: 0; min-width: 18px; }
+.slot-num { color: var(--ink-faint); font-size: 13px; flex-shrink: 0; min-width: 18px; }
 .slot-item-icon { font-size: 15px; flex-shrink: 0; line-height: 1; }
-.slot-item-name { flex: 1; font-size: 13px; }
-.slot-empty-text { flex: 1; font-size: 12px; color: var(--ink-faint); }
+.slot-item-name { flex: 1; font-size: 13.5px; font-weight: 600; }
+.slot-empty-text { flex: 1; font-size: 12.5px; color: var(--ink-faint); }
 
 .slot-remove-btn {
   background: none;
   border: none;
-  color: var(--ink-faint);
+  color: var(--ink-thin);
   cursor: pointer;
-  font-size: 12px;
-  padding: 0 4px;
+  font-size: 13px;
+  padding: 0 5px;
   transition: color .12s;
 }
 .slot-remove-btn:hover { color: var(--seal); }
 
 .slot-process-row { display: flex; align-items: baseline; gap: 8px; flex-wrap: wrap; }
 
-.process-label { font-size: 10px; color: var(--ink-faint); flex-shrink: 0; }
+.process-label { font-size: 11px; color: var(--ink-faint); flex-shrink: 0; }
 
 .process-btns { display: flex; gap: 3px 5px; flex-wrap: wrap; }
 
@@ -208,42 +368,47 @@ button, input { font-family: var(--font); color: inherit; }
   border: none;
   border-bottom: 1px solid transparent;
   color: var(--ink-thin);
-  font-size: 12px;
-  padding: 1px 3px;
+  font-size: 12.5px;
+  padding: 1px 4px;
   cursor: pointer;
-  transition: color .12s, border-color .12s;
+  transition: color .12s, border-color .12s, background .12s;
 }
 .process-btn:hover { color: var(--ink); border-bottom-color: var(--rule); }
-.process-btn.active { color: var(--seal); border-bottom-color: var(--seal); }
+.process-btn.active {
+  color: var(--seal);
+  font-weight: 600;
+  background: var(--seal-soft);
+  border-bottom-color: var(--seal);
+}
 
 /* ── 器 ── */
-.vessel-area { padding-top: 14px; border-top: 1px solid var(--rule-faint); }
+.vessel-area { padding-top: 14px; border-top: 1px solid var(--rule); }
 
 .vessel-row { display: flex; align-items: baseline; gap: 10px; flex-wrap: wrap; }
-.vessel-label { font-size: 10px; color: var(--ink-faint); flex-shrink: 0; }
-.vessel-btns { display: flex; gap: 10px; flex-wrap: wrap; }
+.vessel-label { font-size: 11px; color: var(--ink-faint); flex-shrink: 0; }
+.vessel-stats { display: flex; gap: 8px; flex-wrap: wrap; }
 
-.vessel-btn {
-  background: none;
-  border: none;
-  border-bottom: 1px solid transparent;
-  color: var(--ink-thin);
-  font-size: 12px;
-  padding: 1px 3px;
-  cursor: pointer;
+/* 瓶の数は札に見せる。有るか無いかが目で分かるように */
+.vessel-stat {
+  color: var(--ink);
+  font-size: 12.5px;
+  padding: 1px 8px;
   display: inline-flex;
   align-items: baseline;
-  gap: 5px;
-  transition: color .12s, border-color .12s;
+  gap: 6px;
+  background: var(--paper-deep);
+  border: 1px solid var(--rule);
 }
-.vessel-btn:hover:not(:disabled) { color: var(--ink); border-bottom-color: var(--rule); }
-.vessel-btn.active { color: var(--seal); border-bottom-color: var(--seal); }
-.vessel-btn:disabled { color: var(--ink-faint); cursor: not-allowed; opacity: .5; }
+.vessel-stat.empty {
+  color: var(--seal);
+  background: var(--seal-soft);
+  border-color: var(--seal);
+}
 
-.vessel-count { font-size: 10px; color: var(--ink-faint); }
-.vessel-btn.active .vessel-count { color: var(--seal); }
+.vessel-count { font-size: 12px; color: var(--ink-thin); }
+.vessel-stat.empty .vessel-count { color: var(--seal); }
 
-.vessel-hint { font-size: 10px; color: var(--ink-faint); margin-top: 8px; line-height: 1.8; }
+.vessel-hint { font-size: 11px; color: var(--ink-faint); margin-top: 9px; line-height: 1.85; }
 
 /* ── 実行 ── */
 .compound-area {
@@ -251,78 +416,91 @@ button, input { font-family: var(--font); color: inherit; }
   align-items: center;
   gap: 14px;
   margin-top: 18px;
+  margin-bottom: 0;
   padding-top: 16px;
-  border-top: 1px solid var(--rule-faint);
+  border-top: 1px solid var(--rule);
 }
 
+/* 主たるボタン。地を沈め、二重の縁と刷りずれの影で「押すもの」だと示す */
 .btn-compound {
   flex: 1;
   background: var(--paper-deep);
   border: 1px solid var(--ink-thin);
+  box-shadow: var(--press);
   color: var(--ink);
   font-size: 14px;
   letter-spacing: 0.35em;
   padding: 11px 18px;
   cursor: pointer;
-  transition: background .12s, border-color .12s;
+  transition: background .12s, border-color .12s, box-shadow .12s, transform .06s;
 }
-.btn-compound:hover { background: var(--paper-warm); border-color: var(--ink); }
+.btn-compound:hover {
+  background: var(--paper-warm);
+  border-color: var(--ink);
+  box-shadow: 2px 2px 0 var(--rule);
+}
+.btn-compound:active {
+  box-shadow: 0 0 0 var(--rule);
+  transform: translate(2px, 2px);
+}
 
+/* 添えのボタンは罫だけ */
 .btn-reset {
   background: none;
   border: none;
   border-bottom: 1px solid var(--rule);
-  color: var(--ink-faint);
-  font-size: 11px;
+  color: var(--ink-thin);
+  font-size: 12px;
   padding: 2px 4px;
   cursor: pointer;
   transition: color .12s, border-color .12s;
 }
-.btn-reset:hover { color: var(--ink-thin); border-bottom-color: var(--ink-thin); }
+.btn-reset:hover { color: var(--ink); border-bottom-color: var(--ink); }
 
 /* ════════ 右：覚え書き → 解いた調合 → 結果 ════════ */
-.right-section + .right-section { margin-top: 22px; }
+.right-section + .right-section {
+  margin-top: 20px;
+  padding-top: 18px;
+  border-top: 1px solid var(--rule-strong);
+}
 
 /* 区画の間にひと呼吸置く */
 .side-section {
   margin-top: 18px;
   padding-top: 14px;
-  border-top: 1px solid var(--rule-faint);
+  border-top: 1px solid var(--rule);
 }
 
 /* 素材の覚え書きは短いので浅く */
-.item-memo { min-height: 96px; }
+.item-memo { min-height: 100px; }
 
 /* ── 覚え書き：所持している紙片の綴じ ── */
-.slip-tools { margin-bottom: 6px; }
+.slip-tools { margin-bottom: 8px; }
 
 .slip-index {
   list-style: none;
-  max-height: 124px;
+  max-height: 132px;
   overflow-y: auto;
-  margin-bottom: 10px;
-  border-top: 1px solid var(--rule-faint);
-  scrollbar-width: thin;
-  scrollbar-color: var(--rule) transparent;
+  margin-bottom: 12px;
 }
-.slip-index::-webkit-scrollbar { width: 5px; }
-.slip-index::-webkit-scrollbar-thumb { background: var(--rule); }
 
 .slip-entry {
   display: flex;
   align-items: baseline;
   gap: 7px;
-  padding: 5px 7px;
+  padding: 5px 7px 5px 5px;
   border-bottom: 1px dotted var(--rule);
-  border-left: 2px solid transparent;
+  border-left: 3px solid transparent;
   cursor: pointer;
   transition: background .1s;
 }
+.slip-entry:last-child { border-bottom: none; }
 .slip-entry:hover { background: var(--paper-deep); }
 .slip-entry.current { background: var(--paper-warm); border-left-color: var(--sage); }
+.slip-entry.current .slip-name { font-weight: 600; }
 
 .slip-src {
-  font-size: 10px;
+  font-size: 11px;
   color: var(--ink-faint);
   flex-shrink: 0;
   width: 5.4em;
@@ -330,41 +508,42 @@ button, input { font-family: var(--font); color: inherit; }
   white-space: nowrap;
   text-overflow: ellipsis;
 }
-.slip-name { flex: 1; font-size: 12px; overflow: hidden; white-space: nowrap; text-overflow: ellipsis; }
-.slip-solved { font-size: 10px; color: var(--seal); flex-shrink: 0; }
+.slip-name { flex: 1; font-size: 12.5px; overflow: hidden; white-space: nowrap; text-overflow: ellipsis; }
+.slip-solved { font-size: 11px; color: var(--seal); flex-shrink: 0; }
 
 .slip-empty {
   list-style: none;
-  font-size: 11px;
+  font-size: 12px;
   color: var(--ink-faint);
   text-align: center;
-  padding: 14px 0;
+  padding: 16px 0;
 }
 
-/* ── 開いた紙片 ── */
+/* ── 開いた紙片。地より明るくして、上に置いた一枚に見せる ── */
 .memo-sheet {
-  background: var(--paper-deep);
-  border: 1px solid var(--rule-faint);
-  padding: 12px 14px;
-  min-height: 130px;
+  background: var(--paper-lift);
+  border: 1px solid var(--rule);
+  box-shadow: 2px 2px 0 rgba(42, 37, 30, .07);
+  padding: 13px 15px;
+  min-height: 134px;
 }
 
 .memo-source {
-  font-size: 10px;
+  font-size: 11px;
   color: var(--ink-faint);
   letter-spacing: 0.1em;
   margin-bottom: 2px;
 }
 
-.memo-title { font-size: 13px; font-weight: 600; margin-bottom: 5px; }
+.memo-title { font-size: 14px; font-weight: 600; margin-bottom: 6px; }
 
-.memo-body { font-size: 12px; line-height: 2; color: var(--ink); white-space: pre-wrap; }
+.memo-body { font-size: 12.5px; line-height: 2; color: var(--ink); white-space: pre-wrap; }
 
 .memo-meta {
-  font-size: 10px;
+  font-size: 11px;
   color: var(--ink-faint);
-  margin-top: 8px;
-  padding-top: 6px;
+  margin-top: 9px;
+  padding-top: 7px;
   border-top: 1px dotted var(--rule);
 }
 
@@ -372,67 +551,76 @@ button, input { font-family: var(--font); color: inherit; }
 
 /* 紙片から読み取れる、手順そのものではない情報 */
 .memo-facts {
-  font-size: 10px;
+  font-size: 11px;
   color: var(--ink-faint);
-  margin-top: 9px;
-  padding-top: 7px;
+  margin-top: 10px;
+  padding-top: 8px;
   border-top: 1px dotted var(--rule);
   display: flex;
   align-items: baseline;
-  gap: 7px;
+  gap: 6px;
   flex-wrap: wrap;
 }
 
 .memo-facts .fact {
   color: var(--ink-thin);
+  background: var(--paper-deep);
   border: 1px solid var(--rule);
-  padding: 0 6px;
+  padding: 0 7px;
   white-space: nowrap;
 }
 
-.memo-empty { font-size: 11px; color: var(--ink-faint); line-height: 2; }
+.memo-empty { font-size: 12px; color: var(--ink-faint); line-height: 2; }
 
 /* ── 解いた調合 ── */
-.rb-count { font-size: 10px; color: var(--ink-faint); float: right; letter-spacing: 0; }
+.rb-count {
+  font-size: 11px;
+  font-weight: 400;
+  color: var(--ink-faint);
+  float: right;
+  letter-spacing: 0;
+}
 
 .rb-body {
   max-height: 34vh;
   overflow-y: auto;
-  scrollbar-width: thin;
-  scrollbar-color: var(--rule) transparent;
+  padding: 8px;
 }
-.rb-body::-webkit-scrollbar { width: 5px; }
-.rb-body::-webkit-scrollbar-thumb { background: var(--rule); }
 
-.rb-empty { font-size: 11px; color: var(--ink-faint); line-height: 2; padding: 8px 0; }
+.rb-empty { font-size: 12px; color: var(--ink-faint); line-height: 2; padding: 6px 2px; }
 
 .rb-entry {
   position: relative;
-  border-left: 1px solid var(--rule);
-  padding: 0 46px 0 11px;
-  margin-bottom: 13px;
+  background: var(--paper);
+  border: 1px solid var(--rule-faint);
+  border-left: 3px solid var(--rule);
+  padding: 7px 48px 20px 11px;
+  margin-bottom: 9px;
   cursor: pointer;
+  transition: border-color .12s, background .12s;
 }
+.rb-entry:last-child { margin-bottom: 0; }
+.rb-entry:hover { background: var(--paper-lift); border-left-color: var(--sage); }
 .rb-entry:hover .rb-name { color: var(--sage); }
 
-.rb-name { font-size: 13px; font-weight: 600; transition: color .12s; }
+.rb-name { font-size: 13.5px; font-weight: 600; transition: color .12s; }
 
 .rb-ings { list-style: none; }
-.rb-ings li { font-size: 11px; color: var(--ink-thin); line-height: 1.9; }
+.rb-ings li { font-size: 12px; color: var(--ink-thin); line-height: 1.95; }
 
 .rb-fixed { color: var(--ink); }
 .rb-any   { color: var(--sage); }
 .rb-alt   { color: var(--ink-faint); }
 .rb-proc  { color: var(--ink-thin); }
-.rb-vessel { font-size: 10px; color: var(--ink-faint); margin-top: 2px; }
+.rb-vessel { font-size: 11px; color: var(--ink-faint); margin-top: 3px; }
 
 /* 解明の証。ここだけが朱 */
 .rb-seal {
   position: absolute;
-  right: 2px;
-  top: 2px;
-  width: 36px;
-  height: 36px;
+  right: 4px;
+  top: 4px;
+  width: 34px;
+  height: 34px;
   border: 2px solid var(--seal);
   border-radius: 3px;
   color: var(--seal);
@@ -442,62 +630,105 @@ button, input { font-family: var(--font); color: inherit; }
   align-items: center;
   justify-content: center;
   transform: rotate(-7deg);
-  opacity: .8;
+  opacity: .9;
   pointer-events: none;
 }
 
-/* ── 結果 ── */
+/* ── 覚えた調合をその場で作る ── */
+.rb-make {
+  position: absolute;
+  right: 6px;
+  bottom: 5px;
+  background: var(--paper-deep);
+  border: 1px solid var(--rule);
+  color: var(--ink-thin);
+  font-family: var(--font);
+  font-size: 11px;
+  padding: 1px 9px;
+  cursor: pointer;
+  transition: background .12s, border-color .12s, color .12s;
+}
+.rb-make:hover { background: var(--paper-warm); border-color: var(--ink-thin); color: var(--ink); }
+
+/* ── 結果。調合ボタンのすぐ下。押した結果を目で追うのにスクロールが要らないように ── */
 .result-state.hidden { display: none; }
 
-/* 調合ボタンのすぐ下。押した結果を目で追うのにスクロールが要らないように */
 .result-panel {
-  border: 1px solid var(--rule);
-  border-top: none;
+  border: 1px solid var(--rule-strong);
   background: var(--paper-deep);
   padding: 13px 14px;
   text-align: center;
-  min-height: 84px;
+  min-height: 88px;
   display: flex;
   flex-direction: column;
   justify-content: center;
   gap: 4px;
+  transition: border-color .15s, background .15s;
+  margin-top:30px;
 }
 
-.compound-area { margin-bottom: 0; }
+/* 成否で縁の色を変える。対応しない環境でも見た目が壊れない書き方 */
+.result-panel:has(#state-success:not(.hidden)) { border-color: var(--sage); }
+.result-panel:has(#state-failure:not(.hidden)) {
+  border-color: var(--seal);
+  background: var(--seal-soft);
+}
 
-.result-badge { font-size: 11px; letter-spacing: 0.25em; color: var(--ink-thin); }
-.result-badge.failure-badge { color: var(--seal); }
+.result-badge { font-size: 12px; letter-spacing: 0.25em; color: var(--ink-thin); }
+.result-badge.failure-badge { color: var(--seal); font-weight: 600; }
 
-.result-product-name { font-size: 16px; font-weight: 600; }
-.result-sub-text, .result-product-desc { font-size: 11px; color: var(--ink-thin); line-height: 1.9; }
-.result-form { font-size: 10px; color: var(--ink-faint); }
+.result-product-name { font-size: 17px; font-weight: 600; }
+.result-sub-text, .result-product-desc { font-size: 12px; color: var(--ink-thin); line-height: 1.9; }
+.result-form { font-size: 11px; color: var(--ink-faint); }
 
 /* ════════ 足元 ════════ */
 .game-footer {
   display: flex;
   align-items: center;
   justify-content: center;
-  gap: 18px;
+  gap: 8px 18px;
   flex-wrap: wrap;
   padding-top: 12px;
   border-top: 1px solid var(--rule);
-  font-size: 11px;
-  color: var(--ink-faint);
+  font-size: 11.5px;
+  color: var(--ink-thin);
 }
 
-.footer-key { color: var(--ink-thin); margin-right: 4px; }
+/* 見出し語は札にして、説明文と切り分ける */
+.footer-key {
+  display: inline-block;
+  color: var(--ink);
+  background: var(--paper-deep);
+  border: 1px solid var(--rule-faint);
+  padding: 0 6px;
+  margin-right: 6px;
+}
 
-/* ════════ 報せ ════════ */
+.footer-btn {
+  background: none;
+  border: none;
+  border-bottom: 1px solid var(--rule);
+  color: var(--ink-thin);
+  font-family: var(--font);
+  font-size: 12px;
+  padding: 0 3px;
+  cursor: pointer;
+}
+.footer-btn:hover { color: var(--ink); border-bottom-color: var(--ink); }
+
+/* ════════ 報せ。墨地に白抜き。ここだけは地の紙から浮かせる ════════ */
 .toast {
   position: fixed;
   left: 50%;
   bottom: 26px;
   transform: translateX(-50%) translateY(10px);
-  background: var(--paper);
-  border: 1px solid var(--seal);
-  color: var(--seal);
-  font-size: 12px;
-  padding: 8px 20px;
+  background: var(--ink);
+  border: 1px solid var(--ink);
+  border-left: 3px solid var(--seal);
+  color: var(--paper-lift);
+  font-size: 13px;
+  padding: 9px 22px;
+  box-shadow: 0 6px 20px rgba(30, 26, 20, .3);
   opacity: 0;
   pointer-events: none;
   transition: opacity .2s, transform .2s;
@@ -510,12 +741,26 @@ button, input { font-family: var(--font); color: inherit; }
   *, *::before, *::after { transition: none !important; animation: none !important; }
 }
 
+/* もっと濃くしてほしいと言われたら、素直に濃くする */
+@media (prefers-contrast: more) {
+  :root {
+    --ink-thin:    #3E382F;
+    --ink-faint:   #524A3F;
+    --ink-ghost:   #756C5D;
+    --rule:        #9C8B6C;
+    --rule-faint:  #BCAB8B;
+    --rule-strong: #776646;
+  }
+}
+
 @media (max-width: 1100px) {
-  .game-main { grid-template-columns: 210px minmax(0, 1fr) 280px; gap: 16px; }
+  .game-main { grid-template-columns: 226px minmax(0, 1fr) 296px; gap: 16px; }
+  #panel-items, #panel-notes { padding: 12px 11px 14px; }
+  #panel-workspace { padding: 14px 14px 16px; }
 }
 
 @media (max-width: 900px) {
-  .game-main { grid-template-columns: 1fr; gap: 26px; }
+  .game-main { grid-template-columns: 1fr; gap: 20px; }
   .item-list { max-height: 34vh; }
   .rb-body   { max-height: none; }
   .game-title { font-size: 20px; letter-spacing: 0.3em; }
@@ -527,53 +772,97 @@ button, input { font-family: var(--font); color: inherit; }
 
 .hidden { display: none !important; }
 
-/* ── 日付の帯 ── */
+/* ── 日付の帯。数はここに集まるので、字を起こして読ませる ── */
 .day-bar {
   display: flex;
   align-items: baseline;
   justify-content: space-between;
   gap: 14px;
   flex-wrap: wrap;
-  padding: 8px 12px;
+  padding: 9px 14px;
   background: var(--paper-deep);
-  border: 1px solid var(--rule-faint);
+  border: 1px solid var(--rule);
+  border-left: 3px solid var(--ink-thin);
 }
 
-.day-left, .day-right { display: flex; align-items: baseline; gap: 14px; flex-wrap: wrap; }
-.day-date { font-size: 14px; font-weight: 600; }
-.day-moon { font-size: 12px; color: var(--ink-thin); }
-.day-remaining { font-size: 11px; color: var(--ink-faint); }
-.day-turns { font-size: 12px; color: var(--ink-thin); }
+.day-left, .day-right { display: flex; align-items: baseline; gap: 8px 16px; flex-wrap: wrap; }
+.day-date { font-size: 15px; font-weight: 600; }
+.day-moon { font-size: 12.5px; color: var(--ink-thin); }
+.day-remaining { font-size: 12px; color: var(--ink-faint); }
+.day-turns { font-size: 12.5px; color: var(--ink-thin); }
+
+.day-money, .day-debt { font-size: 12px; color: var(--ink-thin); }
+.day-money b, .day-debt b {
+  font-size: 14px;
+  font-weight: 600;
+  color: var(--ink);
+  border-bottom: 1px solid var(--rule-strong);
+  padding: 0 2px;
+  margin-left: 2px;
+}
+.day-debt.debt-short b { color: var(--seal); border-bottom-color: var(--seal); }
 
 .btn-rest {
-  background: none;
-  border: 1px solid var(--rule);
+  background: var(--paper);
+  border: 1px solid var(--rule-strong);
   color: var(--ink-thin);
-  font-size: 11px;
+  font-size: 12px;
   padding: 3px 12px;
   cursor: pointer;
-  transition: background .12s, border-color .12s;
+  transition: background .12s, border-color .12s, color .12s;
 }
-.btn-rest:hover { background: var(--paper-warm); border-color: var(--ink-thin); }
+.btn-rest:hover { background: var(--paper-lift); border-color: var(--ink-thin); color: var(--ink); }
 
-/* ── 画面の切替 ── */
-.view-tabs { display: flex; gap: 20px; border-bottom: 1px solid var(--rule); }
+/* 日を進めるのは重い操作。刷りずれの影を付けて主たるボタン側に寄せる */
+.btn-next-day {
+  background: var(--paper-warm);
+  border: 1px solid var(--ink-thin);
+  box-shadow: var(--press);
+  color: var(--ink);
+  font-family: var(--font);
+  font-size: 12.5px;
+  letter-spacing: 0.1em;
+  padding: 4px 16px;
+  cursor: pointer;
+  transition: background .12s, box-shadow .12s, transform .06s;
+}
+.btn-next-day:hover { background: var(--rule-faint); box-shadow: 2px 2px 0 var(--rule); }
+.btn-next-day:active { box-shadow: 0 0 0 var(--rule); transform: translate(2px, 2px); }
+
+/* ── 画面の切替。紙の耳を立てて、いまどこに居るかを形で示す ── */
+.view-tabs {
+  display: flex;
+  gap: 4px;
+  padding-left: 4px;
+  border-bottom: 1px solid var(--rule-strong);
+}
 
 .view-tab {
-  background: none;
-  border: none;
-  border-bottom: 2px solid transparent;
-  color: var(--ink-faint);
+  background: var(--paper-deep);
+  border: 1px solid var(--rule);
+  border-bottom-color: var(--rule-strong);
+  color: var(--ink-thin);
   font-family: var(--font);
   font-size: 14px;
   letter-spacing: 0.12em;
-  padding: 5px 2px 7px;
+  padding: 6px 18px 7px;
   margin-bottom: -1px;
   cursor: pointer;
-  transition: color .12s, border-color .12s;
+  transition: color .12s, background .12s;
 }
-.view-tab:hover { color: var(--ink-thin); }
-.view-tab.active { color: var(--ink); border-bottom-color: var(--seal); }
+.view-tab:hover:not(.active) { background: var(--paper-warm); color: var(--ink); }
+
+.view-tab.active {
+  background: var(--paper-lift);
+  border-color: var(--rule-strong);
+  border-bottom-color: var(--paper-lift);
+  box-shadow: inset 0 2px 0 var(--seal);
+  color: var(--ink);
+  font-weight: 600;
+}
+
+.view-tab:disabled { color: var(--ink-ghost); background: var(--paper); opacity: .55; cursor: not-allowed; }
+.view-tab:disabled:hover { color: var(--ink-ghost); background: var(--paper); }
 
 /* ── 選択欄 ── */
 .explore-top {
@@ -581,6 +870,12 @@ button, input { font-family: var(--font); color: inherit; }
   grid-template-columns: 1fr 1.6fr;
   gap: 24px;
   margin-bottom: 20px;
+}
+
+.explore-choose {
+  background: var(--paper-lift);
+  border: 1px solid var(--rule-faint);
+  padding: 13px 14px 14px;
 }
 
 .slot-btns, .area-btns { display: flex; flex-wrap: wrap; gap: 5px 12px; }
@@ -591,36 +886,41 @@ button, input { font-family: var(--font); color: inherit; }
   border-bottom: 1px solid transparent;
   color: var(--ink-thin);
   font-family: var(--font);
-  font-size: 13px;
+  font-size: 13.5px;
   padding: 1px 3px;
   cursor: pointer;
-  transition: color .12s, border-color .12s;
+  transition: color .12s, border-color .12s, background .12s;
 }
 .slot-btn:hover:not(:disabled), .area-btn:hover:not(:disabled) {
   color: var(--ink); border-bottom-color: var(--rule);
 }
-.slot-btn.active, .area-btn.active { color: var(--seal); border-bottom-color: var(--seal); }
+.slot-btn.active, .area-btn.active {
+  color: var(--seal);
+  font-weight: 600;
+  background: var(--seal-soft);
+  border-bottom-color: var(--seal);
+}
 .area-btn.been { color: var(--sage); }
-.slot-btn:disabled, .area-btn:disabled { color: var(--ink-faint); opacity: .45; cursor: not-allowed; }
+.slot-btn:disabled, .area-btn:disabled { color: var(--ink-ghost); opacity: .6; cursor: not-allowed; }
 
-.choose-note { font-size: 10px; color: var(--ink-faint); margin-top: 8px; }
+.choose-note { font-size: 11px; color: var(--ink-faint); margin-top: 8px; line-height: 1.85; }
 
 /* ── 地図 ── */
-.explore-main { display: grid; grid-template-columns: minmax(0, 1fr) 280px; gap: 24px; align-items: start; }
+.explore-main { display: grid; grid-template-columns: minmax(0, 1fr) 296px; gap: 24px; align-items: start; }
 
 .map-grid {
   display: grid;
   grid-template-columns: repeat(10, 1fr);
   gap: 2px;
   max-width: 460px;
-  border: 1px solid var(--rule);
-  padding: 3px;
+  border: 1px solid var(--rule-strong);
+  padding: 4px;
   background: var(--paper-deep);
 }
 
 .map-cell {
   aspect-ratio: 1;
-  border: 1px solid rgba(53, 48, 42, .12);
+  border: 1px solid rgba(42, 37, 30, .20);
   padding: 0;
   cursor: pointer;
   transition: outline-color .1s, opacity .15s;
@@ -628,34 +928,34 @@ button, input { font-family: var(--font); color: inherit; }
   outline-offset: -2px;
 }
 .map-cell:hover:not(:disabled) { outline-color: var(--ink); }
-.map-cell.searched { opacity: .28; cursor: default; }
+.map-cell.searched { opacity: .3; cursor: default; }
 .map-cell:disabled { cursor: default; }
 
-.map-empty { font-size: 12px; color: var(--ink-faint); padding: 40px 0; text-align: center; }
+.map-empty { font-size: 12.5px; color: var(--ink-faint); padding: 40px 0; text-align: center; }
 
 .map-legend { display: flex; flex-wrap: wrap; gap: 4px 14px; margin-top: 12px; max-width: 460px; }
 
-.legend-item { font-size: 10px; color: var(--ink-thin); display: inline-flex; align-items: center; gap: 5px; }
-.legend-item i { width: 10px; height: 10px; display: inline-block; border: 1px solid rgba(53, 48, 42, .2); }
+.legend-item { font-size: 11px; color: var(--ink-thin); display: inline-flex; align-items: center; gap: 5px; }
+.legend-item i { width: 11px; height: 11px; display: inline-block; border: 1px solid rgba(42, 37, 30, .3); }
 
 /* ── 記録 ── */
+.log-pane { background: var(--paper-lift); border: 1px solid var(--rule-faint); padding: 13px 14px 14px; }
+
 .explore-log {
   max-height: 52vh;
   overflow-y: auto;
+  border: none;
   border-top: 1px solid var(--rule-faint);
+  background: transparent;
   padding-top: 8px;
-  scrollbar-width: thin;
-  scrollbar-color: var(--rule) transparent;
 }
-.explore-log::-webkit-scrollbar { width: 5px; }
-.explore-log::-webkit-scrollbar-thumb { background: var(--rule); }
 
-.log-line { font-size: 11px; line-height: 1.9; padding: 3px 0; border-bottom: 1px dotted var(--rule); }
+.log-line { font-size: 12px; line-height: 1.9; padding: 3px 0; border-bottom: 1px dotted var(--rule); }
 .log-ter { color: var(--ink-faint); margin-right: 8px; }
 .log-got { color: var(--ink); }
 .log-none { color: var(--ink-faint); }
 .log-move { color: var(--sage); }
-.log-empty { font-size: 11px; color: var(--ink-faint); padding: 12px 0; }
+.log-empty { font-size: 12px; color: var(--ink-faint); padding: 12px 0; }
 
 @media (max-width: 900px) {
   .explore-top { grid-template-columns: 1fr; gap: 16px; }
@@ -663,50 +963,40 @@ button, input { font-family: var(--font); color: inherit; }
   .explore-log { max-height: 220px; }
 }
 
-/* ── 一日の段階 ── */
-.btn-next-day {
-  background: var(--paper-warm);
-  border: 1px solid var(--ink-thin);
-  color: var(--ink);
-  font-family: var(--font);
-  font-size: 12px;
-  letter-spacing: 0.1em;
-  padding: 3px 16px;
-  cursor: pointer;
-  transition: background .12s;
-}
-.btn-next-day:hover { background: var(--rule); }
-
+/* ── 外にいる間の帯。草の色で縁取って、工房の帯と取り違えないようにする ── */
 .out-bar {
   display: flex;
   align-items: baseline;
   gap: 16px;
   flex-wrap: wrap;
-  padding-bottom: 10px;
-  margin-bottom: 16px;
-  border-bottom: 1px solid var(--rule);
+  padding: 9px 14px;
+  margin-bottom: 18px;
+  background: var(--paper-deep);
+  border: 1px solid var(--rule);
+  border-left: 3px solid var(--sage);
 }
 
 .out-slot {
-  font-size: 13px;
+  font-size: 13.5px;
+  font-weight: 600;
   color: var(--seal);
   flex-shrink: 0;
 }
-.out-slot::before { content: '── '; color: var(--ink-faint); }
-.out-slot::after  { content: ' ──'; color: var(--ink-faint); }
+.out-slot::before { content: '── '; color: var(--ink-faint); font-weight: 400; }
+.out-slot::after  { content: ' ──'; color: var(--ink-faint); font-weight: 400; }
 
 .btn-home {
-  background: none;
-  border: 1px solid var(--rule);
+  background: var(--paper);
+  border: 1px solid var(--rule-strong);
   color: var(--ink-thin);
   font-family: var(--font);
-  font-size: 11px;
-  padding: 2px 12px;
+  font-size: 12px;
+  padding: 3px 13px;
   margin-left: auto;
   cursor: pointer;
-  transition: background .12s, border-color .12s;
+  transition: background .12s, border-color .12s, color .12s;
 }
-.btn-home:hover { background: var(--paper-deep); border-color: var(--ink-thin); }
+.btn-home:hover { background: var(--paper-lift); border-color: var(--ink-thin); color: var(--ink); }
 
 /* ── 今日の収穫 ── */
 .haul-list {
@@ -714,7 +1004,7 @@ button, input { font-family: var(--font); color: inherit; }
   display: grid;
   grid-template-columns: repeat(auto-fill, minmax(200px, 1fr));
   gap: 0 24px;
-  max-width: 860px;
+  max-width: 880px;
 }
 
 .haul-entry {
@@ -724,54 +1014,36 @@ button, input { font-family: var(--font); color: inherit; }
   padding: 5px 4px;
   border-bottom: 1px dotted var(--rule);
 }
-.haul-entry .item-count { color: var(--ink); font-size: 12px; }
-
-.view-tab:disabled { color: var(--ink-faint); opacity: .4; cursor: not-allowed; }
-.view-tab:disabled:hover { color: var(--ink-faint); }
+.haul-entry .item-count { color: var(--ink); font-size: 12.5px; font-weight: 600; }
 
 /* ── 出かけないという選択 ── */
 .rest-block {
   margin-top: 20px;
   padding-top: 16px;
-  border-top: 1px solid var(--rule-faint);
+  border-top: 1px solid var(--rule);
   max-width: 420px;
 }
 
 .btn-rest-big {
   background: var(--paper-deep);
-  border: 1px solid var(--rule);
-  color: var(--ink-thin);
+  border: 1px solid var(--ink-thin);
+  box-shadow: var(--press);
+  color: var(--ink);
   font-family: var(--font);
-  font-size: 13px;
+  font-size: 13.5px;
   letter-spacing: 0.15em;
   padding: 8px 22px;
   cursor: pointer;
-  transition: background .12s, border-color .12s, color .12s;
+  transition: background .12s, box-shadow .12s, transform .06s;
 }
-.btn-rest-big:hover { background: var(--paper-warm); border-color: var(--ink-thin); color: var(--ink); }
-
-/* ── 覚えた調合をその場で作る ── */
-.rb-make {
-  position: absolute;
-  right: 4px;
-  bottom: 2px;
-  background: var(--paper);
-  border: 1px solid var(--rule);
-  color: var(--ink-thin);
-  font-family: var(--font);
-  font-size: 10px;
-  padding: 1px 8px;
-  cursor: pointer;
-  transition: background .12s, border-color .12s, color .12s;
-}
-.rb-make:hover { background: var(--paper-warm); border-color: var(--ink-thin); color: var(--ink); }
-
-.rb-entry { padding-bottom: 20px; }
+.btn-rest-big:hover { background: var(--paper-warm); box-shadow: 2px 2px 0 var(--rule); }
+.btn-rest-big:active { box-shadow: 0 0 0 var(--rule); transform: translate(2px, 2px); }
 
 /* ── 起動に失敗したとき ── */
 .boot-error {
-  background: var(--paper-deep);
+  background: var(--paper-lift);
   border: 1px solid var(--seal);
+  border-left: 4px solid var(--seal);
   color: var(--ink);
   font-family: var(--font);
   font-size: 13px;
@@ -782,7 +1054,7 @@ button, input { font-family: var(--font); color: inherit; }
 .boot-error b { color: var(--seal); }
 .boot-error code {
   font-family: inherit;
-  background: var(--paper-warm);
+  background: var(--paper-deep);
   border: 1px solid var(--rule);
   padding: 0 6px;
   white-space: nowrap;
@@ -792,51 +1064,47 @@ button, input { font-family: var(--font); color: inherit; }
    店・出来事・結末
    ════════════════════════════════════════════════════════ */
 
-.day-money { font-size: 12px; color: var(--ink-thin); }
-.day-money b { color: var(--ink); font-weight: 600; }
+.shop-closed { font-size: 12.5px; color: var(--ink-thin); padding: 40px 0; text-align: center; }
 
-.footer-btn {
-  background: none;
-  border: none;
-  border-bottom: 1px solid var(--rule);
-  color: var(--ink-faint);
-  font-family: var(--font);
-  font-size: 11px;
-  padding: 0 2px;
-  cursor: pointer;
+.shop-grid { display: grid; grid-template-columns: repeat(auto-fit, minmax(260px, 1fr)); gap: 20px; }
+
+/* 売る・買う・行商人。同じ形のまま、見出しの印と縁で三つを描き分ける */
+.shop-grid > div {
+  background: var(--paper);
+  border: 1px solid var(--rule-faint);
+  padding: 13px 14px 14px;
 }
-.footer-btn:hover { color: var(--ink-thin); border-bottom-color: var(--ink-thin); }
+.shop-grid > div:nth-child(1) .column-title::before { background: var(--sage); }
+.shop-grid > div:nth-child(2) .column-title::before { background: var(--ink); }
+.shop-grid > div:nth-child(3) .column-title::before { background: var(--seal); }
 
-.shop-closed { font-size: 12px; color: var(--ink-faint); padding: 40px 0; text-align: center; }
-
-.shop-grid { display: grid; grid-template-columns: repeat(auto-fit, minmax(260px, 1fr)); gap: 26px; }
+/* 行商人は今日だけの店。縁を破線にして常設と分ける */
+.shop-grid > div:nth-child(3) { border-style: dashed; border-color: var(--rule); }
 
 .trade-list {
   list-style: none;
   max-height: 46vh;
   overflow-y: auto;
-  scrollbar-width: thin;
-  scrollbar-color: var(--rule) transparent;
 }
-.trade-list::-webkit-scrollbar { width: 5px; }
-.trade-list::-webkit-scrollbar-thumb { background: var(--rule); }
 
 .trade-entry {
   display: flex;
   align-items: center;
   gap: 8px;
-  padding: 5px 4px;
+  padding: 5px 6px;
   border-bottom: 1px dotted var(--rule);
 }
-.trade-have  { font-size: 11px; color: var(--ink-faint); min-width: 2em; text-align: right; }
-.trade-price { font-size: 12px; color: var(--ink-thin); min-width: 3.4em; text-align: right; }
+.trade-entry:last-child { border-bottom: none; }
+.trade-entry .item-name { font-size: 12.5px; }
+.trade-have  { font-size: 11.5px; color: var(--ink-faint); min-width: 2em; text-align: right; }
+.trade-price { font-size: 12.5px; color: var(--ink); min-width: 3.4em; text-align: right; }
 
 .trade-btn {
-  background: none;
+  background: var(--paper-deep);
   border: 1px solid var(--rule);
   color: var(--ink-thin);
   font-family: var(--font);
-  font-size: 11px;
+  font-size: 11.5px;
   padding: 1px 10px;
   cursor: pointer;
   flex-shrink: 0;
@@ -847,31 +1115,34 @@ button, input { font-family: var(--font); color: inherit; }
 /* ── 夜の客 ── */
 .buyer-area {
   border: 1px solid var(--seal);
+  border-left: 4px solid var(--seal);
   background: var(--paper-deep);
   padding: 14px 18px;
-  margin-bottom: 26px;
+  margin-bottom: 24px;
 }
 .buyer-title { color: var(--seal); border-bottom-color: var(--seal); }
-.buyer-text { font-size: 12px; color: var(--ink-thin); line-height: 2; margin-bottom: 8px; }
-.buyer-area .trade-list { max-height: none; }
+.buyer-title::before { background: var(--seal); }
+.buyer-text { font-size: 12.5px; color: var(--ink-thin); line-height: 2; margin-bottom: 10px; }
+.buyer-area .trade-list { max-height: none; background: var(--paper-lift); border-color: var(--rule); }
 
 .btn-refuse {
-  background: none;
-  border: 1px solid var(--rule);
+  background: var(--paper);
+  border: 1px solid var(--rule-strong);
   color: var(--ink-thin);
   font-family: var(--font);
-  font-size: 11px;
+  font-size: 12px;
   padding: 3px 14px;
-  margin-top: 10px;
+  margin-top: 12px;
   cursor: pointer;
+  transition: background .12s, color .12s;
 }
-.btn-refuse:hover { background: var(--paper-warm); }
+.btn-refuse:hover { background: var(--paper-lift); color: var(--ink); }
 
 /* ── 覆い（出来事・結末） ── */
 .overlay {
   position: fixed;
   inset: 0;
-  background: rgba(53, 48, 42, .55);
+  background: rgba(30, 26, 20, .62);
   display: flex;
   align-items: center;
   justify-content: center;
@@ -879,52 +1150,53 @@ button, input { font-family: var(--font); color: inherit; }
   z-index: 500;
 }
 
+/* 中央の作業面と同じ二重罫。ここは読ませる紙だという合図 */
 .overlay-box {
-  background: var(--paper);
+  background: var(--paper-lift);
   border: 1px solid var(--ink-thin);
-  padding: 26px 30px;
+  box-shadow: 0 12px 34px rgba(30, 26, 20, .3),
+              inset 0 0 0 1px var(--paper-lift),
+              inset 0 0 0 2px var(--rule-faint);
+  padding: 28px 32px;
   max-width: 560px;
   width: 100%;
   max-height: 84vh;
   overflow-y: auto;
 }
 
-.overlay-title { font-size: 16px; font-weight: 600; margin-bottom: 12px; }
-.overlay-text { font-size: 13px; line-height: 2.1; white-space: pre-wrap; margin-bottom: 18px; }
+.overlay-title { font-size: 17px; font-weight: 600; margin-bottom: 12px; }
+.overlay-text { font-size: 13.5px; line-height: 2.1; color: var(--ink); white-space: pre-wrap; margin-bottom: 18px; }
 
 .ending-box { max-width: 620px; }
-.ending-lead { font-size: 11px; color: var(--ink-faint); letter-spacing: .3em; margin-bottom: 6px; }
+.ending-lead { font-size: 12px; color: var(--ink-faint); letter-spacing: .3em; margin-bottom: 6px; }
 
 .ending-notes { list-style: none; margin-bottom: 18px; }
 .ending-notes li {
-  font-size: 12px;
+  font-size: 12.5px;
   color: var(--ink-thin);
   line-height: 2;
   padding-left: 12px;
-  border-left: 1px solid var(--rule);
+  border-left: 2px solid var(--rule);
   margin-bottom: 6px;
 }
-
 
 /* ════════════════════════════════════════════════════════
    表題と開幕
    ════════════════════════════════════════════════════════ */
 
-.day-debt { font-size: 12px; color: var(--ink-thin); }
-.day-debt b { font-weight: 600; }
-.day-debt.debt-short b { color: var(--seal); }
-
-.title-box { max-width: 460px; text-align: center; padding: 40px 34px 34px; }
+.title-box { max-width: 460px; text-align: center; padding: 42px 34px 34px; }
 
 /* 朱印。表題の上に一つだけ置く */
 .title-seal {
   display: inline-block;
-  width: 34px;
-  height: 34px;
-  line-height: 32px;
-  border: 1px solid var(--seal);
+  width: 36px;
+  height: 36px;
+  line-height: 34px;
+  border: 2px solid var(--seal);
+  border-radius: 2px;
   color: var(--seal);
-  font-size: 15px;
+  font-size: 16px;
+  font-weight: 600;
   margin-bottom: 22px;
 }
 
@@ -936,19 +1208,19 @@ button, input { font-family: var(--font); color: inherit; }
 }
 
 .title-sub {
-  font-size: 12px;
+  font-size: 12.5px;
   color: var(--ink-thin);
   letter-spacing: 0.2em;
   margin-top: 8px;
 }
 
 .title-note {
-  font-size: 12px;
+  font-size: 12.5px;
   color: var(--ink-thin);
   line-height: 2.1;
   margin: 26px auto 0;
   padding-top: 18px;
-  border-top: 1px solid var(--rule-faint);
+  border-top: 1px solid var(--rule);
   max-width: 22em;
 }
 
@@ -957,7 +1229,7 @@ button, input { font-family: var(--font); color: inherit; }
   align-items: center;
   justify-content: center;
   gap: 14px;
-  margin-top: 24px;
+  margin-top: 26px;
 }
 
 .opening-box { max-width: 560px; }
@@ -968,11 +1240,11 @@ button, input { font-family: var(--font); color: inherit; }
   align-items: center;
   gap: 10px;
   padding-top: 14px;
-  border-top: 1px solid var(--rule-faint);
+  border-top: 1px solid var(--rule);
 }
 
 .opening-page {
-  font-size: 11px;
+  font-size: 12px;
   color: var(--ink-faint);
   letter-spacing: 0.2em;
   margin-right: auto;

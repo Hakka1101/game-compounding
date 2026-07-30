@@ -123,7 +123,7 @@ const RECIPES_DATA = [
         "value": "permeate",
         "processId": "distill",
         "quantity": 1,
-        "note": "浸透特性の水質を蒸留（例：草木の朝露・灰から取った灰汁）"
+        "note": "浸透特性のものを蒸留。水質に限らない（例：ハシリタケ・草木の朝露・潮石）"
       },
       {
         "checkType": "categoryId",
@@ -163,7 +163,7 @@ const RECIPES_DATA = [
         "value": "preserve",
         "processId": "boil",
         "quantity": 1,
-        "note": "保存特性の水質を煮る（例：鉄渋の湧き水・古井戸の溜まり水）"
+        "note": "保存特性のものを煮る。水質に限らない（例：鉄渋の湧き水・ニガタケ）"
       },
       {
         "checkType": "categoryId",
@@ -609,7 +609,7 @@ const RECIPES_DATA = [
         "value": "permeate",
         "processId": "raw",
         "quantity": 1,
-        "note": "浸透性の水質で紙に定着（草木の朝露等）"
+        "note": "浸透特性のもので紙に定着。水質に限らない（例：草木の朝露・ハシリタケ）"
       }
     ]
   },

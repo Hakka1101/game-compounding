@@ -6,9 +6,9 @@
 // ═══════════════════════════════════════════════════════
 
 const MAX_SLOTS = 5;
-const VESSEL_GLASS = 'item_088';   // ガラス瓶：気体用
-const VESSEL_PHIAL = 'item_175';   // 薬瓶　　：液体用
-const START_VESSELS = 8;
+const VESSEL_GLASS = 'item_088';   // 気体瓶：気体用
+const VESSEL_PHIAL = 'item_175';   // 薬瓶　：液体用
+const START_VESSELS = 5;
 
 const SLOT_NUMS = ['①', '②', '③', '④', '⑤'];
 
@@ -40,7 +40,6 @@ function score(r) {
 function freshCraftState() {
     return {
         slots: [],              // [{ item, processId }]
-        vesselId: null,
         stock: {},              // 所持数
         vessels: { [VESSEL_GLASS]: START_VESSELS, [VESSEL_PHIAL]: START_VESSELS },
         unlockedRecipes: [],
@@ -87,13 +86,6 @@ function init() {
         .addEventListener('input', e => { state.query = e.target.value.trim(); renderItemList(); });
     document.getElementById('btn-compound').addEventListener('click', handleCompound);
     document.getElementById('btn-reset').addEventListener('click', handleReset);
-    document.querySelectorAll('.vessel-btn').forEach(btn => {
-        btn.addEventListener('click', () => {
-            state.vesselId = btn.dataset.vessel || null;
-            renderVessels();
-            clearResultIfIdle();
-        });
-    });
     renderAll();
     openTitle(hadSave);
 }
@@ -245,14 +237,24 @@ function renderItemList() {
         const n = held(item.id);
 
         const li = document.createElement('li');
-        li.className = 'item-entry available' + (picked ? ' selected' : '');
+        li.className = 'item-entry available'
+            + (picked ? ' selected' : '')
+            + (state.memoItem === item.id ? ' reading' : '');
         li.dataset.id = item.id;
         li.title = item.description || '';
         li.innerHTML =
             `<span class="item-cat-icon">${cat ? cat.icon : '？'}</span>` +
             `<span class="item-name">${item.name}</span>` +
-            `<span class="item-count">${n}</span>`;
+            `<span class="item-count">${n}</span>` +
+            `<button type="button" class="item-read-btn"` +
+            ` title="書き付けを読む。調合台には入れない"` +
+            ` aria-label="${item.name} の書き付けを読む">読</button>`;
         li.addEventListener('click', () => handleItemClick(item.id));
+        // 行の押下は出し入れなので、読むだけのときは伝えない
+        li.querySelector('.item-read-btn').addEventListener('click', ev => {
+            ev.stopPropagation();
+            readItemMemo(item.id);
+        });
         list.appendChild(li);
     });
 
@@ -309,13 +311,14 @@ function buildEmptySlot(index) {
     return el;
 }
 
+// 器は選ばせない。棚に何本あるかを見せるだけ。
 function renderVessels() {
-    document.querySelectorAll('.vessel-btn').forEach(btn => {
-        const id = btn.dataset.vessel || null;
-        btn.classList.toggle('active', state.vesselId === id);
-        const c = btn.querySelector('.vessel-count');
-        if (c) c.textContent = state.vessels[id] ?? 0;
-        btn.disabled = id !== null && state.vessels[id] <= 0;
+    document.querySelectorAll('.vessel-stat').forEach(el => {
+        const id = el.dataset.vessel;
+        const n = state.vessels[id] ?? 0;
+        const c = el.querySelector('.vessel-count');
+        if (c) c.textContent = n;
+        el.classList.toggle('empty', n <= 0);
     });
 }
 
@@ -339,6 +342,15 @@ function handleItemClick(itemId) {
     clearResultIfIdle();
 }
 
+// 書き付けを読むだけ。調合台と結果には触れない。
+// 棚から出し入れせずに素材を吟味できるようにするための口。
+function readItemMemo(itemId) {
+    if (state.memoItem === itemId) return;
+    state.memoItem = itemId;
+    renderItemList();     // どの行を読んでいるか印を付け直す
+    renderItemMemo();
+}
+
 function handleProcessSelect(index, processId) {
     if (!state.slots[index]) return;
     state.slots[index].processId = processId;
@@ -355,7 +367,6 @@ function handleRemoveSlot(index) {
 
 function handleReset() {
     state.slots = [];
-    state.vesselId = null;
     renderAll();
     showWaiting();
 }
@@ -376,8 +387,13 @@ function handleCompound() {
         return flash('工程が決まっていないスロットがあります');
     }
 
-    const recipe = checkRecipe(state.slots, state.vesselId);
+    const recipe = checkRecipe(state.slots);
     if (recipe) {
+        // 器は剤形で決まる。足りなければ材料を消費せず、スロットも残して止める
+        if (recipe.vessel && held(recipe.vessel) <= 0) {
+            renderVessels();
+            return flash(whyCannot(recipe));
+        }
         consume(recipe, state.slots);
         if (!state.unlockedRecipes.includes(recipe.result)) {
             state.unlockedRecipes.push(recipe.result);
@@ -388,29 +404,56 @@ function handleCompound() {
         showFailure();
     }
     state.slots = [];
-    state.vesselId = null;
     renderAll();
 }
 
 // ═══════════════════════════════════════════════════════
 //  レシピ照合
 // ═══════════════════════════════════════════════════════
-function checkRecipe(slots, vesselId) {
+function checkRecipe(slots) {
     for (const recipe of RECIPES_SORTED) {
         if (recipe.ingredients.length !== slots.length) continue;
-        if ((recipe.vessel || null) !== (vesselId || null)) continue;
-
-        const used = new Set();
-        let ok = true;
-        for (const need of recipe.ingredients) {
-            const at = slots.findIndex((s, i) =>
-                !used.has(i) && s.processId === need.processId && matches(s.item, need));
-            if (at === -1) { ok = false; break; }
-            used.add(at);
-        }
-        if (ok) return recipe;
+        if (assignSlots(recipe.ingredients, slots)) return recipe;
     }
     return null;
+}
+
+// 要求と枠の割り当て。合わなければ戻ってやり直すので、投入した順には依らない。
+//
+// 前は要求を順に見て、当てはまる枠を先着で押さえていた。それだと
+// 「カサカサ草そのもの」と「揮発する素材なら何でも」のように要求が重なったとき、
+// 後者が先にカサカサ草を掴んでしまい、前者の相手が居なくなって失敗した。
+// 成り立つ組み合わせが一つでもあるなら、必ず見つけるようにする。
+//
+// 選べる枠の少ない要求から先に埋める。枝が早く尽きるので、
+// 五つ六つの枠なら総当たりでも目に見える待ちにはならない。
+function assignSlots(ingredients, slots) {
+    const order = ingredients
+        .map((need, i) => ({
+            need,
+            fits: slots.reduce((n, s) =>
+                n + (s.processId === need.processId && matches(s.item, need) ? 1 : 0), 0)
+        }))
+        .sort((a, b) => a.fits - b.fits);
+
+    if (order.some(o => o.fits === 0)) return false;
+
+    const used = new Array(slots.length).fill(false);
+
+    const walk = i => {
+        if (i === order.length) return true;
+        const need = order[i].need;
+        for (let k = 0; k < slots.length; k++) {
+            if (used[k]) continue;
+            const s = slots[k];
+            if (s.processId !== need.processId || !matches(s.item, need)) continue;
+            used[k] = true;
+            if (walk(i + 1)) return true;
+            used[k] = false;
+        }
+        return false;
+    };
+    return walk(0);
 }
 
 const FIELD = {
@@ -432,7 +475,7 @@ function matches(item, need) {
 
 // ═══════════════════════════════════════════════════════
 //  消費と生成
-//  瓶は中身を使うと戻る（液体→薬瓶 / 気体→ガラス瓶）
+//  瓶は結果の剤形で自動に使われ、中身を材料にすると戻る（液体→薬瓶 / 気体→気体瓶）
 // ═══════════════════════════════════════════════════════
 function consume(recipe, slots) {
     slots.forEach(s => {
@@ -506,7 +549,6 @@ function craftFromRecipe(name) {
     openSlipFor(name, true);
     showSuccess(recipe);
     state.slots = [];
-    state.vesselId = null;
     renderAll();
     flash(`${name} をひとつ作った。`);
 }
@@ -727,7 +769,7 @@ function renderItemMemo() {
     const box = document.getElementById('item-memo');
     const it = itemById.get(state.memoItem);
     if (!it) {
-        box.innerHTML = '<p class="memo-empty">素材を押すと、<br>祖母の書き付けが出てくる。</p>';
+        box.innerHTML = '<p class="memo-empty">素材の端の「読」を押すと、<br>祖母の書き付けが出てくる。</p>';
         return;
     }
     box.innerHTML =
