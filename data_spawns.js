@@ -907,8 +907,8 @@ const SPAWNS_DATA = [
     "timeSlot": "dawn",
     "rate": 0.5,
     "quantity": 1,
-    "condition": "春",
-    "note": "雪解けの季節のみ"
+    "condition": null,
+    "note": "雪の下から流れる"
   },
   {
     "itemId": "item_042",
@@ -916,8 +916,8 @@ const SPAWNS_DATA = [
     "timeSlot": "morning",
     "rate": 0.38,
     "quantity": 1,
-    "condition": "春",
-    "note": null
+    "condition": null,
+    "note": "雪の下から流れる"
   },
   {
     "itemId": "item_043",
@@ -944,7 +944,7 @@ const SPAWNS_DATA = [
     "rate": 0.55,
     "quantity": 1,
     "condition": null,
-    "note": "竈の灰から漉す"
+    "note": "竈の底に溜まっている"
   },
   {
     "itemId": "item_044",
@@ -2285,7 +2285,7 @@ const SPAWNS_DATA = [
     "rate": 0.45,
     "quantity": 1,
     "condition": null,
-    "note": "灰を漉す"
+    "note": "竈の底に溜まっている"
   },
   {
     "itemId": "item_044",
@@ -2294,7 +2294,7 @@ const SPAWNS_DATA = [
     "rate": 0.32,
     "quantity": 1,
     "condition": null,
-    "note": "灰を漉す"
+    "note": "竈の底に溜まっている"
   },
   {
     "itemId": "item_044",
@@ -2303,7 +2303,7 @@ const SPAWNS_DATA = [
     "rate": 0.28,
     "quantity": 1,
     "condition": null,
-    "note": "灰を漉す"
+    "note": "竈の底に溜まっている"
   },
   {
     "itemId": "item_043",

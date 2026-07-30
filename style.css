@@ -255,6 +255,50 @@ button, input { font-family: var(--font); color: inherit; letter-spacing: inheri
 .item-entry.selected .item-name { font-weight: 600; }
 .item-entry.selected .item-count { color: var(--sage); font-weight: 600; }
 
+/* ── 切らしている棚 ──
+   一度でも手にしたものは消さない。数だけが 0 になる。 */
+.item-entry.depleted { cursor: default; }
+.item-entry.depleted .item-cat-icon,
+.item-entry.depleted .item-name { opacity: .5; }
+.item-entry.depleted .item-count { opacity: .5; }
+
+/* ── まだ採ったことがないもの ──
+   名前と、採れるあたりだけ。地形と時間帯は自分の足で見つける。 */
+.item-entry.unheld { cursor: default; }
+.item-entry.unheld .item-cat-icon { opacity: .25; }
+.item-entry.unheld .item-name { opacity: .5; font-style: italic; }
+.item-entry.unheld .item-count {
+  font-size: 11px;
+  opacity: .55;
+  letter-spacing: .03em;
+}
+.item-entry.unheld.reading .item-name { opacity: .8; }
+
+/* 未採取の覚え書き */
+.memo-unheld { font-style: italic; }
+
+/* 採取したあとに開く採取地 */
+.memo-where {
+  margin-top: 10px;
+  padding-top: 8px;
+  border-top: 1px dotted var(--rule);
+}
+.where-head {
+  font-size: 11.5px;
+  color: var(--ink-thin);
+  margin: 0 0 4px;
+}
+.where-area { color: var(--ink); }
+.where-row {
+  display: flex;
+  gap: 8px;
+  font-size: 12px;
+  line-height: 1.7;
+}
+.where-ter { min-width: 5.5em; color: var(--ink); }
+.where-when { color: var(--ink-thin); }
+.where-note { font-size: 11.5px; color: var(--ink-thin); margin: 4px 0 0; }
+
 /* ── 読むだけの口 ──
    名前の表示幅を削らないよう、行に触れたときだけ右端に出す。
    出ている間は所持数と入れ替わる（同じ場所を使う）。         */

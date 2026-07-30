@@ -505,10 +505,10 @@ const RECIPES_DATA = [
       },
       {
         "checkType": "reactionId",
-        "value": "permeate",
+        "value": "volatile",
         "processId": "raw",
         "quantity": 1,
-        "note": "浸透素材で匂いを拡散"
+        "note": "揮発素材で匂いを広げる"
       }
     ]
   },

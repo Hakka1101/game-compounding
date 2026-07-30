@@ -20,6 +20,77 @@ const catById    = new Map(dataCategories.map(c => [c.id, c]));
 
 const recipeByResult = new Map(RECIPES_DATA.map(r => [r.result, r]));
 
+// ═══════════════════════════════════════════════════════
+//  採取地の索引
+//  棚には採取素材が最初から並ぶ。ただし未採取のうちは、
+//  名前と短い説明と「どのあたりで採れるか」だけ。
+//  地形と時間帯は、実際に手に取ってから明かす。
+// ═══════════════════════════════════════════════════════
+const terrainNameById = new Map(TERRAINS_DATA.terrains.map(t => [t.id, t.name]));
+const slotNameById    = new Map(TIME_SLOTS.map(t => [t.id, t.name]));
+
+// 地形 → その地形を含むエリア名
+const areasByTerrain = (() => {
+    const m = new Map();
+    TERRAINS_DATA.areas.forEach(a => {
+        a.grid.forEach(row => row.forEach(t => {
+            if (!m.has(t)) m.set(t, new Set());
+            m.get(t).add(a.name);
+        }));
+    });
+    return m;
+})();
+
+// 素材 → 採れるエリア名 / 地形ごとの時間帯
+const AREA_ORDER  = TERRAINS_DATA.areas.map(a => a.name);
+const SLOT_ORDER  = TIME_SLOTS.map(t => t.id);
+const AREA_LISTED = 3;   // これより多いときは頭から三つだけ挙げて「ほか」
+
+const gatherInfo = (() => {
+    const m = new Map();
+    SPAWNS_DATA.forEach(s => {
+        if (!m.has(s.itemId)) m.set(s.itemId, { areas: new Set(), byTerrain: new Map(), moon: false });
+        const g = m.get(s.itemId);
+        (areasByTerrain.get(s.terrainId) || []).forEach(n => g.areas.add(n));
+        if (!g.byTerrain.has(s.terrainId)) g.byTerrain.set(s.terrainId, new Set());
+        g.byTerrain.get(s.terrainId).add(s.timeSlot);
+        if (s.condition === '満月') g.moon = true;
+    });
+    return m;
+})();
+
+// 未採取のうちに見せる、採れるあたり。採れない素材（調合専用）は null。
+function areaHint(itemId) {
+    const g = gatherInfo.get(itemId);
+    if (!g || !g.areas.size) return null;
+    const list = [...g.areas].sort((a, b) => AREA_ORDER.indexOf(a) - AREA_ORDER.indexOf(b));
+    return list.length <= AREA_LISTED
+        ? list.join('・')
+        : list.slice(0, AREA_LISTED).join('・') + ' ほか';
+}
+
+// 採取したあとに開く、地形と時間帯まで含む採取地。
+function gatherDetail(itemId) {
+    const g = gatherInfo.get(itemId);
+    if (!g) return '';
+    const rows = [...g.byTerrain.entries()].map(([terId, slots]) => {
+        const when = [...slots]
+            .sort((a, b) => SLOT_ORDER.indexOf(a) - SLOT_ORDER.indexOf(b))
+            .map(id => slotNameById.get(id) || id).join('・');
+        return `<span class="where-row">`
+             + `<span class="where-ter">${terrainNameById.get(terId) || terId}</span>`
+             + `<span class="where-when">${when}</span></span>`;
+    }).join('');
+    return `<div class="memo-where">`
+         + `<p class="where-head">採れるところ　<span class="where-area">${areaHint(itemId)}</span></p>`
+         + rows
+         + (g.moon ? `<p class="where-note">満月の夜にかぎる。</p>` : '')
+         + `</div>`;
+}
+
+// 一度でも手にしたか。everHeld は採取・調合・購入の三箇所で立つ。
+function known(id) { return !!state.everHeld[id]; }
+
 const hintsByResult = new Map();
 (typeof HINTS_DATA !== 'undefined' ? HINTS_DATA : []).forEach(h => {
     if (!hintsByResult.has(h.result)) hintsByResult.set(h.result, []);
@@ -209,10 +280,14 @@ function buildFilters() {
     });
 }
 
+// 棚に並ぶもの。
+//   ・採取素材        … 最初から全部並ぶ。未採取なら薄く、採れるあたりだけ添える
+//   ・一度でも手にしたもの … 使い切っても「0」で残す。作れると分かったことは忘れない
+//   ・まだ作っていない調合品 … 伏せておく
 function visibleItems() {
     return ITEMS_DATA.filter(it => {
         if (it.id === VESSEL_GLASS || it.id === VESSEL_PHIAL) return false;
-        if (held(it.id) <= 0) return false;
+        if (it.source !== '採取' && !known(it.id)) return false;
         if (state.filter !== 'all' && it.categoryId !== state.filter) return false;
         if (state.query && !it.name.includes(state.query)) return false;
         return true;
@@ -235,9 +310,11 @@ function renderItemList() {
         const picked = state.slots.some(s => s.item.id === item.id);
         const cat = catById.get(item.categoryId);
         const n = held(item.id);
+        const seen = known(item.id);
 
         const li = document.createElement('li');
-        li.className = 'item-entry available'
+        li.className = 'item-entry'
+            + (!seen ? ' unheld' : n > 0 ? ' available' : ' depleted')
             + (picked ? ' selected' : '')
             + (state.memoItem === item.id ? ' reading' : '');
         li.dataset.id = item.id;
@@ -245,7 +322,7 @@ function renderItemList() {
         li.innerHTML =
             `<span class="item-cat-icon">${cat ? cat.icon : '？'}</span>` +
             `<span class="item-name">${item.name}</span>` +
-            `<span class="item-count">${n}</span>` +
+            `<span class="item-count">${seen ? n : (areaHint(item.id) || '？')}</span>` +
             `<button type="button" class="item-read-btn"` +
             ` title="書き付けを読む。調合台には入れない"` +
             ` aria-label="${item.name} の書き付けを読む">読</button>`;
@@ -258,7 +335,9 @@ function renderItemList() {
         list.appendChild(li);
     });
 
-    document.getElementById('item-total').textContent = `${items.length} 種`;
+    // 並んだ行数ではなく、いま実際に手元にある種類を数える
+    document.getElementById('item-total').textContent =
+        `${items.filter(it => held(it.id) > 0).length} 種`;
 }
 
 // ═══════════════════════════════════════════════════════
@@ -331,10 +410,11 @@ function handleItemClick(itemId) {
     if (at !== -1) {
         state.slots.splice(at, 1);
     } else {
-        if (state.slots.length >= MAX_SLOTS) return;
+        // 切らしていても未採取でも、行を押せば覚え書きは開く。
+        // 調合台に載せられないだけ。
         const item = itemById.get(itemId);
-        if (!item || held(itemId) <= 0) return;
-        state.slots.push({ item, processId: null });
+        const canPlace = item && held(itemId) > 0 && state.slots.length < MAX_SLOTS;
+        if (canPlace) state.slots.push({ item, processId: null });
     }
     renderItemList();
     renderWorkspace();
@@ -772,11 +852,27 @@ function renderItemMemo() {
         box.innerHTML = '<p class="memo-empty">素材の端の「読」を押すと、<br>祖母の書き付けが出てくる。</p>';
         return;
     }
+    // ── まだ手に取ったことがない ──
+    // 名前と短い言い伝え、それに「どのあたりで採れるか」まで。
+    // 地形と時間帯は伏せる。自分の足で見つけるところ。
+    if (!known(it.id)) {
+        const where = areaHint(it.id);
+        box.innerHTML =
+            `<p class="memo-source">未採取</p>` +
+            `<p class="memo-title">${it.name}</p>` +
+            `<p class="memo-body">${it.description || '名だけを聞いている。'}</p>` +
+            `<p class="memo-meta memo-unheld">` +
+            (where ? `${where}のあたりで採れるという。` : 'どこで採れるものか、聞いた覚えがない。') +
+            `<br>手に取れば、もっと分かるはずだ。</p>`;
+        return;
+    }
+
     box.innerHTML =
         `<p class="memo-source">${catById.get(it.categoryId)?.name || ''}　${it.form || ''}</p>` +
         `<p class="memo-title">${it.name}</p>` +
         `<p class="memo-body">${it.note || it.description || '書き付けは残っていない。'}</p>` +
-        (it.description && it.note ? `<p class="memo-meta">${it.description}</p>` : '');
+        (it.description && it.note ? `<p class="memo-meta">${it.description}</p>` : '') +
+        gatherDetail(it.id);
 }
 
 // 右：いま開いている紙片
